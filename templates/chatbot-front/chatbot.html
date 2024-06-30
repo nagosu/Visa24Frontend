@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../../static/chatbot-front/css/common.css" />
+    <link rel="stylesheet" href="../../static/chatbot-front/css/chatbot.css" />
+    <title>front</title>
+  </head>
+  <body>
+    <div class="chatbot">
+      <!-- head -->
+      <div class="head">
+        <div class="head__container">
+          <img
+            src="../../static/chatbot-front/images/logo.jpg"
+            alt="logo"
+            class="logo"
+          />
+          <span class="title">VISA24</span>
+        </div>
+      </div>
+
+      <!-- content -->
+      <div class="content">
+        <div class="content__container">
+          <div class="chat__container">
+            <div class="chat__wrapper">
+              <!-- 챗봇 채팅 -->
+              <div class="chat__chatbot">
+                <img
+                  src="../../static/chatbot-front/images/avatar.png"
+                  alt="avatar"
+                />
+                <div class="chat__text-container">
+                  <!-- 최초 접속 메시지 -->
+                  <div class="chat__text">
+                    <span
+                      >VISA24입니다. 무엇을 도와드릴까요? 아래 비자 업무를
+                      선택하거나 궁금한 사항을 입력해 주세요.</span
+                    >
+                  </div>
+                  <!-- 1단계 -->
+                  <div class="chat__text">
+                    <div class="chat__select">
+                      <button type="button" class="first-step__button">
+                        VISA(국내)
+                      </button>
+                      <button type="button" class="first-step__button">
+                        VISA(해외)
+                      </button>
+                      <button type="button" class="first-step__button">
+                        VISA(관련)
+                      </button>
+                      <button type="button" class="first-step__button">
+                        VISA(국적신청)
+                      </button>
+                    </div>
+                  </div>
+                  <!-- 2단계 -->
+                  <div class="chat__text">
+                    <div class="chat__select">
+                      <span class="chat__select-text"
+                        >2단계 아래의 VISA 코드를 선택해 주세요.</span
+                      >
+                      <div class="divCol">
+                        <!-- 카테고리 드롭다운 -->
+                        <div class="category-dropdown">
+                          <select
+                            id="categorySelectSecond"
+                            class="category-dropdown-select second"
+                          >
+                            <option
+                              value="업무를 선택해 주세요"
+                              selected
+                              hidden
+                            >
+                              업무를 선택해 주세요
+                            </option>
+                            <option value="H-2(방문취업)">H-2(방문취업)</option>
+                            <option value="F-4(통합연장)">F-4(통합연장)</option>
+                            <option value="F-4(재외동포)">F-4(재외동포)</option>
+                            <option value="F-5(국민의배우자 영주권*동포영주권)">
+                              F-5(국민의배우자 영주권*동포영주권)
+                            </option>
+                            <option value="A-1(외교)">A-1(외교)</option>
+                            <option value="A-2(공무)">A-2(공무)</option>
+                          </select>
+                          <svg
+                            class="category-dropdown-icon"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M11.8079 14.7695L8.09346 10.3121C7.65924 9.79109 8.02976 9 8.70803 9L15.292 9C15.9702 9 16.3408 9.79108 15.9065 10.3121L12.1921 14.7695C12.0921 14.8895 11.9079 14.8895 11.8079 14.7695Z"
+                              fill="#1b3133"
+                            />
+                          </svg>
+                        </div>
+                        <span class="warning-text"
+                          >* 카테고리를 선택 후 입력해 주세요.</span
+                        >
+                      </div>
+                      <button
+                        class="chat__select-done-button"
+                        id="secondStepButton"
+                      >
+                        다음
+                      </button>
+                    </div>
+                  </div>
+                  <!-- 이전/처음 버튼 -->
+                  <div class="chat__reset">
+                    <button class="chat__reset-button prev">
+                      <span>이전으로</span
+                      ><svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M4 8L3.29289 8.70711L2.58579 8L3.29289 7.29289L4 8ZM9 20C8.44772 20 8 19.5523 8 19C8 18.4477 8.44772 18 9 18L9 20ZM8.29289 13.7071L3.29289 8.70711L4.70711 7.29289L9.70711 12.2929L8.29289 13.7071ZM3.29289 7.29289L8.29289 2.29289L9.70711 3.70711L4.70711 8.70711L3.29289 7.29289ZM4 7L14.5 7L14.5 9L4 9L4 7ZM14.5 20L9 20L9 18L14.5 18L14.5 20ZM21 13.5C21 17.0898 18.0898 20 14.5 20L14.5 18C16.9853 18 19 15.9853 19 13.5L21 13.5ZM14.5 7C18.0899 7 21 9.91015 21 13.5L19 13.5C19 11.0147 16.9853 9 14.5 9L14.5 7Z"
+                          fill="#33363F"
+                        />
+                      </svg>
+                    </button>
+                    <button class="chat__reset-button home">
+                      <span>처음으로</span
+                      ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M5.27446 10.1262C5 10.7229 5 11.4018 5 12.7595V16.9999C5 18.8856 5 19.8284 5.58579 20.4142C6.11733 20.9457 6.94285 20.9949 8.5 20.9995V16C8.5 14.8954 9.39543 14 10.5 14H13.5C14.6046 14 15.5 14.8954 15.5 16V20.9995C17.0572 20.9949 17.8827 20.9457 18.4142 20.4142C19 19.8284 19 18.8856 19 16.9999V12.7595C19 11.4018 19 10.7229 18.7255 10.1262C18.4511 9.52943 17.9356 9.08763 16.9047 8.20401L15.9047 7.34687C14.0414 5.74974 13.1098 4.95117 12 4.95117C10.8902 4.95117 9.95857 5.74974 8.09525 7.34687L7.09525 8.20401C6.06437 9.08763 5.54892 9.52943 5.27446 10.1262ZM13.5 20.9999V16H10.5V20.9999H13.5Z"
+                          fill="#222222"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <!-- 3단계 -->
+                  <div class="chat__text">
+                    <div class="chat__select">
+                      <span class="chat__select-text"
+                        >3단계 아래의 VISA 코드를 선택해 주세요.</span
+                      >
+                      <div class="divCol">
+                        <!-- 카테고리 드롭다운 -->
+                        <div class="category-dropdown">
+                          <select
+                            id="categorySelectThird"
+                            class="category-dropdown-select third"
+                          >
+                            <option
+                              value="업무를 선택해 주세요"
+                              selected
+                              hidden
+                            >
+                              업무를 선택해 주세요
+                            </option>
+                            <option value="H-2(방문취업)">H-2(방문취업)</option>
+                            <option value="F-4(통합연장)">F-4(통합연장)</option>
+                            <option value="F-4(재외동포)">F-4(재외동포)</option>
+                            <option value="F-5(국민의배우자 영주권*동포영주권)">
+                              F-5(국민의배우자 영주권*동포영주권)
+                            </option>
+                            <option value="A-1(외교)">A-1(외교)</option>
+                            <option value="A-2(공무)">A-2(공무)</option>
+                          </select>
+                          <svg
+                            class="category-dropdown-icon"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M11.8079 14.7695L8.09346 10.3121C7.65924 9.79109 8.02976 9 8.70803 9L15.292 9C15.9702 9 16.3408 9.79108 15.9065 10.3121L12.1921 14.7695C12.0921 14.8895 11.9079 14.8895 11.8079 14.7695Z"
+                              fill="#1b3133"
+                            />
+                          </svg>
+                        </div>
+                        <span class="warning-text"
+                          >* 카테고리를 선택 후 입력해 주세요.</span
+                        >
+                      </div>
+                      <button
+                        class="chat__select-done-button third"
+                        id="thirdStepButton"
+                      >
+                        완료
+                      </button>
+                    </div>
+                  </div>
+                  <!-- 최종 콘텐츠 (일반) -->
+                  <div class="chat__text">
+                    <div class="chat__select last-content">
+                      <span
+                        >요청하신 [업무]의 준비 서류는 아래와 같습니다.</span
+                      >
+                      <span
+                        >1. 출입국외국인청 신청 시 준비하셔야 할 양식서류</span
+                      >
+                      <p>
+                        •
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12 14L11.2929 14.7071L12 15.4142L12.7071 14.7071L12 14ZM13 5C13 4.44772 12.5523 4 12 4C11.4477 4 11 4.44772 11 5L13 5ZM6.29289 9.70711L11.2929 14.7071L12.7071 13.2929L7.70711 8.29289L6.29289 9.70711ZM12.7071 14.7071L17.7071 9.70711L16.2929 8.29289L11.2929 13.2929L12.7071 14.7071ZM13 14L13 5L11 5L11 14L13 14Z"
+                            fill="#33363F"
+                          />
+                          <path
+                            d="M5 16L5 17C5 18.1046 5.89543 19 7 19L17 19C18.1046 19 19 18.1046 19 17V16"
+                            stroke="#33363F"
+                            stroke-width="2"
+                          />
+                        </svg>
+                        표기가 있는 버튼은 클릭 시 양식 다운로드 가능합니다.
+                      </p>
+                      <button type="button" class="last-step__button">
+                        <span>통합신청서</span>
+                        <svg
+                          class="download-icon"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12 14L11.2929 14.7071L12 15.4142L12.7071 14.7071L12 14ZM13 5C13 4.44772 12.5523 4 12 4C11.4477 4 11 4.44772 11 5L13 5ZM6.29289 9.70711L11.2929 14.7071L12.7071 13.2929L7.70711 8.29289L6.29289 9.70711ZM12.7071 14.7071L17.7071 9.70711L16.2929 8.29289L11.2929 13.2929L12.7071 14.7071ZM13 14L13 5L11 5L11 14L13 14Z"
+                            fill="#33363F"
+                          />
+                          <path
+                            d="M5 16L5 17C5 18.1046 5.89543 19 7 19L17 19C18.1046 19 19 18.1046 19 17V16"
+                            stroke="#33363F"
+                            stroke-width="2"
+                          />
+                        </svg>
+                      </button>
+                      <button type="button" class="last-step__button">
+                        <span>위임장</span>
+                        <svg
+                          class="download-icon"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12 14L11.2929 14.7071L12 15.4142L12.7071 14.7071L12 14ZM13 5C13 4.44772 12.5523 4 12 4C11.4477 4 11 4.44772 11 5L13 5ZM6.29289 9.70711L11.2929 14.7071L12.7071 13.2929L7.70711 8.29289L6.29289 9.70711ZM12.7071 14.7071L17.7071 9.70711L16.2929 8.29289L11.2929 13.2929L12.7071 14.7071ZM13 14L13 5L11 5L11 14L13 14Z"
+                            fill="#33363F"
+                          />
+                          <path
+                            d="M5 16L5 17C5 18.1046 5.89543 19 7 19L17 19C18.1046 19 19 18.1046 19 17V16"
+                            stroke="#33363F"
+                            stroke-width="2"
+                          />
+                        </svg>
+                      </button>
+                      <button type="button" class="last-step__button">
+                        <span>업무수행확인서</span>
+                        <svg
+                          class="download-icon"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12 14L11.2929 14.7071L12 15.4142L12.7071 14.7071L12 14ZM13 5C13 4.44772 12.5523 4 12 4C11.4477 4 11 4.44772 11 5L13 5ZM6.29289 9.70711L11.2929 14.7071L12.7071 13.2929L7.70711 8.29289L6.29289 9.70711ZM12.7071 14.7071L17.7071 9.70711L16.2929 8.29289L11.2929 13.2929L12.7071 14.7071ZM13 14L13 5L11 5L11 14L13 14Z"
+                            fill="#33363F"
+                          />
+                          <path
+                            d="M5 16L5 17C5 18.1046 5.89543 19 7 19L17 19C18.1046 19 19 18.1046 19 17V16"
+                            stroke="#33363F"
+                            stroke-width="2"
+                          />
+                        </svg>
+                      </button>
+                      <button type="button" class="last-step__button">
+                        <span>기타</span>
+                      </button>
+                      <div class="docsDiv">
+                        <span
+                          >2. 출입국외국인청 신청 시 준비하셔야 할
+                          첨부서류</span
+                        >
+                        <p>• 여권</p>
+                        <p>• 외국인등록증</p>
+                        <p>• 특례고용가능확인서(고용노동부 발급)</p>
+                        <p>• 표준근로계약서(고용노동부 발급)</p>
+                        <p>• 사업자등록증</p>
+                      </div>
+                      <div class="agentDiv">
+                        <span>3. 대행 신청</span>
+                        <span>• 서류 작성 신청</span>
+                        <p>- 양식 서류를 대신하여 작성해 드립니다.</p>
+                        <p>- (출입국에 본인 직접 접수)</p>
+                        <p>- 가격 : 3000원</p>
+                        <span>• 업무 대행 신청</span>
+                        <p>- 양식 서류를 대신 작성 및 접수해 드립니다.</p>
+                        <p>- (행성사 접수)</p>
+                        <p>- 가격(출입국 수수료 별도) : 10000원</p>
+                      </div>
+                      <div class="button-container">
+                        <button class="last-step__button">서류작성 신청</button>
+                        <button class="last-step__button">업무대행 신청</button>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- 이전/처음 버튼 -->
+                  <div class="chat__reset">
+                    <button class="chat__reset-button prev">
+                      <span>이전으로</span
+                      ><svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M4 8L3.29289 8.70711L2.58579 8L3.29289 7.29289L4 8ZM9 20C8.44772 20 8 19.5523 8 19C8 18.4477 8.44772 18 9 18L9 20ZM8.29289 13.7071L3.29289 8.70711L4.70711 7.29289L9.70711 12.2929L8.29289 13.7071ZM3.29289 7.29289L8.29289 2.29289L9.70711 3.70711L4.70711 8.70711L3.29289 7.29289ZM4 7L14.5 7L14.5 9L4 9L4 7ZM14.5 20L9 20L9 18L14.5 18L14.5 20ZM21 13.5C21 17.0898 18.0898 20 14.5 20L14.5 18C16.9853 18 19 15.9853 19 13.5L21 13.5ZM14.5 7C18.0899 7 21 9.91015 21 13.5L19 13.5C19 11.0147 16.9853 9 14.5 9L14.5 7Z"
+                          fill="#33363F"
+                        />
+                      </svg>
+                    </button>
+                    <button class="chat__reset-button home">
+                      <span>처음으로</span
+                      ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M5.27446 10.1262C5 10.7229 5 11.4018 5 12.7595V16.9999C5 18.8856 5 19.8284 5.58579 20.4142C6.11733 20.9457 6.94285 20.9949 8.5 20.9995V16C8.5 14.8954 9.39543 14 10.5 14H13.5C14.6046 14 15.5 14.8954 15.5 16V20.9995C17.0572 20.9949 17.8827 20.9457 18.4142 20.4142C19 19.8284 19 18.8856 19 16.9999V12.7595C19 11.4018 19 10.7229 18.7255 10.1262C18.4511 9.52943 17.9356 9.08763 16.9047 8.20401L15.9047 7.34687C14.0414 5.74974 13.1098 4.95117 12 4.95117C10.8902 4.95117 9.95857 5.74974 8.09525 7.34687L7.09525 8.20401C6.06437 9.08763 5.54892 9.52943 5.27446 10.1262ZM13.5 20.9999V16H10.5V20.9999H13.5Z"
+                          fill="#222222"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <!-- 최종 콘텐츠 (해외) -->
+                  <div class="chat__text">
+                    <div class="chat__select last-content">
+                      <span
+                        >요청하신 [업무]의 준비 서류는 아래와 같습니다.</span
+                      >
+                      <span
+                        >1. 출입국외국인청 신청 시 준비하셔야 할 양식서류</span
+                      >
+                      <p>
+                        •
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12 14L11.2929 14.7071L12 15.4142L12.7071 14.7071L12 14ZM13 5C13 4.44772 12.5523 4 12 4C11.4477 4 11 4.44772 11 5L13 5ZM6.29289 9.70711L11.2929 14.7071L12.7071 13.2929L7.70711 8.29289L6.29289 9.70711ZM12.7071 14.7071L17.7071 9.70711L16.2929 8.29289L11.2929 13.2929L12.7071 14.7071ZM13 14L13 5L11 5L11 14L13 14Z"
+                            fill="#33363F"
+                          />
+                          <path
+                            d="M5 16L5 17C5 18.1046 5.89543 19 7 19L17 19C18.1046 19 19 18.1046 19 17V16"
+                            stroke="#33363F"
+                            stroke-width="2"
+                          />
+                        </svg>
+                        표기가 있는 버튼은 클릭 시 양식 다운로드 가능합니다.
+                      </p>
+                      <button type="button" class="last-step__button">
+                        <span>통합신청서</span>
+                        <svg
+                          class="download-icon"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12 14L11.2929 14.7071L12 15.4142L12.7071 14.7071L12 14ZM13 5C13 4.44772 12.5523 4 12 4C11.4477 4 11 4.44772 11 5L13 5ZM6.29289 9.70711L11.2929 14.7071L12.7071 13.2929L7.70711 8.29289L6.29289 9.70711ZM12.7071 14.7071L17.7071 9.70711L16.2929 8.29289L11.2929 13.2929L12.7071 14.7071ZM13 14L13 5L11 5L11 14L13 14Z"
+                            fill="#fff"
+                          />
+                          <path
+                            d="M5 16L5 17C5 18.1046 5.89543 19 7 19L17 19C18.1046 19 19 18.1046 19 17V16"
+                            stroke="#fff"
+                            stroke-width="2"
+                          />
+                        </svg>
+                      </button>
+                      <button type="button" class="last-step__button">
+                        <span>위임장</span>
+                        <svg
+                          class="download-icon"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12 14L11.2929 14.7071L12 15.4142L12.7071 14.7071L12 14ZM13 5C13 4.44772 12.5523 4 12 4C11.4477 4 11 4.44772 11 5L13 5ZM6.29289 9.70711L11.2929 14.7071L12.7071 13.2929L7.70711 8.29289L6.29289 9.70711ZM12.7071 14.7071L17.7071 9.70711L16.2929 8.29289L11.2929 13.2929L12.7071 14.7071ZM13 14L13 5L11 5L11 14L13 14Z"
+                            fill="#fff"
+                          />
+                          <path
+                            d="M5 16L5 17C5 18.1046 5.89543 19 7 19L17 19C18.1046 19 19 18.1046 19 17V16"
+                            stroke="#fff"
+                            stroke-width="2"
+                          />
+                        </svg>
+                      </button>
+                      <button type="button" class="last-step__button">
+                        <span>업무수행확인서</span>
+                        <svg
+                          class="download-icon"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12 14L11.2929 14.7071L12 15.4142L12.7071 14.7071L12 14ZM13 5C13 4.44772 12.5523 4 12 4C11.4477 4 11 4.44772 11 5L13 5ZM6.29289 9.70711L11.2929 14.7071L12.7071 13.2929L7.70711 8.29289L6.29289 9.70711ZM12.7071 14.7071L17.7071 9.70711L16.2929 8.29289L11.2929 13.2929L12.7071 14.7071ZM13 14L13 5L11 5L11 14L13 14Z"
+                            fill="#fff"
+                          />
+                          <path
+                            d="M5 16L5 17C5 18.1046 5.89543 19 7 19L17 19C18.1046 19 19 18.1046 19 17V16"
+                            stroke="#fff"
+                            stroke-width="2"
+                          />
+                        </svg>
+                      </button>
+                      <button type="button" class="last-step__button">
+                        <span>기타</span>
+                      </button>
+                      <div class="docsDiv">
+                        <span
+                          >2. 출입국외국인청 신청 시 준비하셔야 할
+                          첨부서류</span
+                        >
+                        <p>• 여권</p>
+                        <p>• 외국인등록증</p>
+                        <p>• 특례고용가능확인서(고용노동부 발급)</p>
+                        <p>• 표준근로계약서(고용노동부 발급)</p>
+                        <p>• 사업자등록증</p>
+                      </div>
+                      <div class="agentDiv">
+                        <span>3. 대행 신청</span>
+                        <span>• 서류 작성 신청</span>
+                        <p>- 양식 서류를 대신하여 작성해 드립니다.</p>
+                        <p>- (출입국에 본인 직접 접수)</p>
+                        <p>- 가격 : 3000원</p>
+                        <span>• 업무 대행 신청</span>
+                        <p>- 양식 서류를 대신 작성 및 접수해 드립니다.</p>
+                        <p>- (행성사 접수)</p>
+                        <p>- 가격(출입국 수수료 별도) : 10000원</p>
+                      </div>
+                      <div class="button-container">
+                        <button class="last-step__button abroad">
+                          서류작성 신청
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- 이전/처음 버튼 -->
+                  <div class="chat__reset">
+                    <button class="chat__reset-button prev">
+                      <span>이전으로</span
+                      ><svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M4 8L3.29289 8.70711L2.58579 8L3.29289 7.29289L4 8ZM9 20C8.44772 20 8 19.5523 8 19C8 18.4477 8.44772 18 9 18L9 20ZM8.29289 13.7071L3.29289 8.70711L4.70711 7.29289L9.70711 12.2929L8.29289 13.7071ZM3.29289 7.29289L8.29289 2.29289L9.70711 3.70711L4.70711 8.70711L3.29289 7.29289ZM4 7L14.5 7L14.5 9L4 9L4 7ZM14.5 20L9 20L9 18L14.5 18L14.5 20ZM21 13.5C21 17.0898 18.0898 20 14.5 20L14.5 18C16.9853 18 19 15.9853 19 13.5L21 13.5ZM14.5 7C18.0899 7 21 9.91015 21 13.5L19 13.5C19 11.0147 16.9853 9 14.5 9L14.5 7Z"
+                          fill="#33363F"
+                        />
+                      </svg>
+                    </button>
+                    <button class="chat__reset-button home">
+                      <span>처음으로</span
+                      ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M5.27446 10.1262C5 10.7229 5 11.4018 5 12.7595V16.9999C5 18.8856 5 19.8284 5.58579 20.4142C6.11733 20.9457 6.94285 20.9949 8.5 20.9995V16C8.5 14.8954 9.39543 14 10.5 14H13.5C14.6046 14 15.5 14.8954 15.5 16V20.9995C17.0572 20.9949 17.8827 20.9457 18.4142 20.4142C19 19.8284 19 18.8856 19 16.9999V12.7595C19 11.4018 19 10.7229 18.7255 10.1262C18.4511 9.52943 17.9356 9.08763 16.9047 8.20401L15.9047 7.34687C14.0414 5.74974 13.1098 4.95117 12 4.95117C10.8902 4.95117 9.95857 5.74974 8.09525 7.34687L7.09525 8.20401C6.06437 9.08763 5.54892 9.52943 5.27446 10.1262ZM13.5 20.9999V16H10.5V20.9999H13.5Z"
+                          fill="#222222"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <!-- 개인정보 입력 -->
+                  <div class="chat__text">
+                    <div class="chat__select">
+                      <span
+                        >서류작성 진행을 위해 개인정보가 필요합니다.<br />하단
+                        항목에 필요한 정보를 입력해 주세요.</span
+                      >
+                      <!-- 필수 입력 -->
+                      <div class="chat__input-container">
+                        <span>*필수 입력</span>
+                        <div class="chat__input">
+                          <span>*여권상 성과 이름</span>
+                          <input type="text" class="input-required" />
+                        </div>
+                        <div class="chat__input">
+                          <span>*전화번호</span>
+                          <input type="text" class="input-required" />
+                        </div>
+                      </div>
+                      <!-- 선택 입력 -->
+                      <div class="chat__input-container">
+                        <span>선택 입력</span>
+                        <div class="chat__input">
+                          <span>국적</span>
+                          <input type="text" />
+                        </div>
+                        <div class="chat__input">
+                          <span>여권번호</span>
+                          <input type="text" />
+                        </div>
+                        <div class="chat__input">
+                          <span>여권발급일자</span>
+                          <input type="text" />
+                        </div>
+                        <div class="chat__input">
+                          <span>여권유효기간</span>
+                          <input type="text" />
+                        </div>
+                        <div class="chat__input">
+                          <span>외국인등록번호</span>
+                          <input type="text" />
+                        </div>
+                        <div class="chat__input">
+                          <span>주소</span>
+                          <input type="text" />
+                        </div>
+                        <div class="chat__input">
+                          <span>체류기간만료일자</span>
+                          <input type="text" />
+                        </div>
+                        <div class="chat__input">
+                          <span>VISA_TYPE</span>
+                          <input type="text" />
+                        </div>
+                      </div>
+                      <!-- 취소/완료 버튼 -->
+                      <div class="button-container">
+                        <button class="button-container__button cancel">
+                          취소
+                        </button>
+                        <button class="button-container__button done">
+                          완료
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- 개인정보 입력완료 -->
+                  <div class="chat__text">
+                    <div class="chat__select">
+                      <span
+                        >입력하신 개인 정보로 서류작성을 진행합니다.<br />입력하신
+                        개인정보를 확인해주세요.<br />우측 아이콘을 클릭해
+                        내용을 수정할 수 있습니다.</span
+                      >
+                      <div class="edit-button__container">
+                        <button>
+                          수정하기<svg
+                            class="info-edit-icon"
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M17.2047 10.7957L19.0007 8.9997C19.546 8.45445 19.8186 8.18182 19.9644 7.88773C20.2416 7.32818 20.2416 6.67122 19.9644 6.11167C19.8186 5.81757 19.546 5.54495 19.0007 4.9997C18.4555 4.45445 18.1829 4.18182 17.8888 4.03609C17.3292 3.7588 16.6723 3.7588 16.1127 4.03609C15.8186 4.18182 15.546 4.45445 15.0007 4.9997L13.1821 6.81835C14.146 8.46895 15.5321 9.84451 17.2047 10.7957ZM11.7276 8.27281L4.85713 15.1433C4.43207 15.5684 4.21954 15.7809 4.0798 16.042C3.94007 16.3031 3.88112 16.5978 3.76323 17.1873L3.14784 20.2643C3.08131 20.5969 3.04805 20.7632 3.14266 20.8578C3.23727 20.9524 3.40357 20.9191 3.73618 20.8526L6.81316 20.2372C7.40262 20.1193 7.69734 20.0604 7.95844 19.9206C8.21954 19.7809 8.43207 19.5684 8.85713 19.1433L15.7465 12.2539C14.1249 11.2383 12.7532 9.87597 11.7276 8.27281Z"
+                              fill="#fff"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                      <!-- 필수 입력 -->
+                      <div class="chat__input-container">
+                        <span>*필수 입력</span>
+                        <div class="chat__input">
+                          <span>*여권상 성과 이름</span>
+                          <span class="filled-text">김엔디</span>
+                        </div>
+                        <div class="chat__input">
+                          <span>*전화번호</span>
+                          <span class="filled-text">010-1234-5678</span>
+                        </div>
+                      </div>
+                      <!-- 선택 입력 -->
+                      <div class="chat__input-container">
+                        <span>선택 입력</span>
+                        <div class="chat__input">
+                          <span>국적</span>
+                          <span class="filled-text">한국</span>
+                        </div>
+                        <div class="chat__input">
+                          <span>여권번호</span>
+                          <span class="filled-text">XXXXXXXXXXXXXX</span>
+                        </div>
+                        <div class="chat__input">
+                          <span>여권발급일자</span>
+                          <span class="filled-text">yy.mm.dd-yy.mm.dd</span>
+                        </div>
+                        <div class="chat__input">
+                          <span>여권유효기간</span>
+                          <span class="filled-text">yy.mm.dd-yy.mm.dd</span>
+                        </div>
+                        <div class="chat__input">
+                          <span>외국인등록번호</span>
+                          <span class="filled-text">XXXXXXXXXXXXXX</span>
+                        </div>
+                        <div class="chat__input">
+                          <span>주소</span>
+                          <span class="filled-text">XXX XXX XXXX XXXXX-X</span>
+                        </div>
+                        <div class="chat__input">
+                          <span>체류기간만료일자</span>
+                          <span class="filled-text">yy.mm.dd-yy.mm.dd</span>
+                        </div>
+                        <div class="chat__input">
+                          <span>VISA_TYPE</span>
+                          <span class="filled-text">XXXX</span>
+                        </div>
+                      </div>
+                      <span
+                        >입력하신 정보로 서류작성 신청을 진행하시겠습니까?</span
+                      >
+                      <!-- 취소/신청 진행 버튼 -->
+                      <div class="button-container">
+                        <button class="button-container__button cancel">
+                          취소
+                        </button>
+                        <button class="button-container__button continue">
+                          신청 진행
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- 결제 -->
+                  <div class="chat__text">
+                    <div class="chat__select">
+                      <span
+                        >신청하신 업무와 행정사 정보를 확인하신 후 계좌번호로
+                        비용을 입금해 주시기 바랍니다.</span
+                      >
+                      <span
+                        >입금 진행 후 아래 [입금 완료] 버튼을 클릭해 주시면
+                        신청이 완료됩니다.</span
+                      >
+                      <div class="colDiv">
+                        <span class="bold-text">* 업무 내용 : 근무처 추가</span>
+                        <span class="bold-text">* 업무 대행 비용 : 5000원</span>
+                      </div>
+                      <div class="colDiv">
+                        <span>1. 대행 기관 행정사 정보</span>
+                        <span>• 기관명 : </span>
+                        <span>• 예금주 명 : </span>
+                        <span>• 계좌번호 : </span>
+                      </div>
+                      <button>입금완료</button>
+                    </div>
+                  </div>
+                  <!-- 접수 완료 메시지 (서류작성 신청) -->
+                  <div class="chat__text">
+                    <div class="chat__select">
+                      <span>접수되었습니다.</span>
+                      <span
+                        >신청서류는 출입국외국인청 업무매뉴얼 기반으로 구성된
+                        세트입니다. 신청접수시 또는 심사시 심사공무원의 재량으로
+                        담당 행정사 확인 후 연락드리겠습니다.</span
+                      >
+                    </div>
+                  </div>
+                  <!-- 접수 완료 메시지 (서류작성 신청) -->
+                  <div class="chat__text">
+                    <div class="chat__select">
+                      <span>접수되었습니다.</span>
+                      <span
+                        >법무부 출입국민원 대행기관 행정사가 곧
+                        연락드리겠습니다.</span
+                      >
+                    </div>
+                  </div>
+                  <!-- 처음 버튼 -->
+                  <div class="chat__reset">
+                    <button class="chat__reset-button home">
+                      <span>처음으로</span
+                      ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M5.27446 10.1262C5 10.7229 5 11.4018 5 12.7595V16.9999C5 18.8856 5 19.8284 5.58579 20.4142C6.11733 20.9457 6.94285 20.9949 8.5 20.9995V16C8.5 14.8954 9.39543 14 10.5 14H13.5C14.6046 14 15.5 14.8954 15.5 16V20.9995C17.0572 20.9949 17.8827 20.9457 18.4142 20.4142C19 19.8284 19 18.8856 19 16.9999V12.7595C19 11.4018 19 10.7229 18.7255 10.1262C18.4511 9.52943 17.9356 9.08763 16.9047 8.20401L15.9047 7.34687C14.0414 5.74974 13.1098 4.95117 12 4.95117C10.8902 4.95117 9.95857 5.74974 8.09525 7.34687L7.09525 8.20401C6.06437 9.08763 5.54892 9.52943 5.27446 10.1262ZM13.5 20.9999V16H10.5V20.9999H13.5Z"
+                          fill="#222222"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <!-- 지원하지 않는 업무 -->
+                  <div class="chat__text">
+                    <span
+                      >비자24에서 지원하지 않는 업무입니다.<br />다시
+                      문의해주세요.
+                    </span>
+                  </div>
+                  <!-- 이전/처음 버튼 -->
+                  <div class="chat__reset">
+                    <button class="chat__reset-button prev">
+                      <span>이전으로</span
+                      ><svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M4 8L3.29289 8.70711L2.58579 8L3.29289 7.29289L4 8ZM9 20C8.44772 20 8 19.5523 8 19C8 18.4477 8.44772 18 9 18L9 20ZM8.29289 13.7071L3.29289 8.70711L4.70711 7.29289L9.70711 12.2929L8.29289 13.7071ZM3.29289 7.29289L8.29289 2.29289L9.70711 3.70711L4.70711 8.70711L3.29289 7.29289ZM4 7L14.5 7L14.5 9L4 9L4 7ZM14.5 20L9 20L9 18L14.5 18L14.5 20ZM21 13.5C21 17.0898 18.0898 20 14.5 20L14.5 18C16.9853 18 19 15.9853 19 13.5L21 13.5ZM14.5 7C18.0899 7 21 9.91015 21 13.5L19 13.5C19 11.0147 16.9853 9 14.5 9L14.5 7Z"
+                          fill="#33363F"
+                        />
+                      </svg>
+                    </button>
+                    <button class="chat__reset-button home">
+                      <span>처음으로</span
+                      ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M5.27446 10.1262C5 10.7229 5 11.4018 5 12.7595V16.9999C5 18.8856 5 19.8284 5.58579 20.4142C6.11733 20.9457 6.94285 20.9949 8.5 20.9995V16C8.5 14.8954 9.39543 14 10.5 14H13.5C14.6046 14 15.5 14.8954 15.5 16V20.9995C17.0572 20.9949 17.8827 20.9457 18.4142 20.4142C19 19.8284 19 18.8856 19 16.9999V12.7595C19 11.4018 19 10.7229 18.7255 10.1262C18.4511 9.52943 17.9356 9.08763 16.9047 8.20401L15.9047 7.34687C14.0414 5.74974 13.1098 4.95117 12 4.95117C10.8902 4.95117 9.95857 5.74974 8.09525 7.34687L7.09525 8.20401C6.06437 9.08763 5.54892 9.52943 5.27446 10.1262ZM13.5 20.9999V16H10.5V20.9999H13.5Z"
+                          fill="#222222"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <!-- 좋은 예시 -->
+                  <div class="chat__text">
+                    <div class="chat__select task">
+                      <span>아래 업무를 선택해주세요.</span>
+                      <button>
+                        사증신청*방문동거F-1(SOFA 해당자의 21세이상 동반자녀
+                        또는 기타가족)
+                      </button>
+                      <button>
+                        사증신청*방문동거F-1-5 (자녀양육지원등의 결혼이민자 의
+                        부모,가족)
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- 사용자 채팅 -->
+              <div class="chat__user">
+                <div class="chat__user-text-container">
+                  <div class="chat__user-text">
+                    사용자 채팅입니다.<br />이 채팅을 기준으로 위의 채팅은
+                    참고용으로 화면에 표시해 두었고, 아래 채팅부터는 실제
+                    시나리오입니다.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- bottom -->
+      <div class="bottom">
+        <div class="bottom__container">
+          <div class="input__container">
+            <input
+              class="input-box"
+              type="text"
+              placeholder="질문을 입력해 주세요."
+            />
+            <button type="button">
+              <svg
+                class="send-button"
+                xmlns="http://www.w3.org/2000/svg"
+                width="30"
+                height="30"
+                viewBox="0 0 30 30"
+              >
+                <g id="icon" transform="translate(-1819 -884)">
+                  <circle
+                    id="타원_2666"
+                    data-name="타원 2666"
+                    cx="15"
+                    cy="15"
+                    r="15"
+                    transform="translate(1819 884)"
+                    fill="#13b256"
+                  />
+                  <g id="그룹_19700" data-name="그룹 19700">
+                    <rect
+                      id="area"
+                      width="12"
+                      height="16"
+                      transform="translate(1828 891)"
+                      fill="none"
+                    />
+                    <path
+                      id="패스_16448"
+                      data-name="패스 16448"
+                      d="M9.5,19.3,13.8,15l4.3,4.3"
+                      transform="translate(1820.203 877.041)"
+                      fill="none"
+                      stroke="#fff"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                    />
+                    <path
+                      id="패스_16449"
+                      data-name="패스 16449"
+                      d="M18,4.5V18.417"
+                      transform="translate(1816 887.543)"
+                      fill="none"
+                      stroke="#fff"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                    />
+                  </g>
+                </g>
+              </svg>
+            </button>
+          </div>
+          <button class="voice-button">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect x="8" y="2" width="8" height="13" rx="4" fill="#000000" />
+              <path
+                d="M5 11C5 12.8565 5.7375 14.637 7.05025 15.9497C8.36301 17.2625 10.1435 18 12 18C13.8565 18 15.637 17.2625 16.9497 15.9497C18.2625 14.637 19 12.8565 19 11"
+                stroke="#000000"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M12 21V19"
+                stroke="#000000"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <script src="../../static/chatbot-front/js/chatbot.js"></script>
+  </body>
+</html>
