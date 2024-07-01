@@ -285,7 +285,7 @@ img {
   left: 50%;
   bottom: 20px;
   display: flex;
-  width: 250px;
+  width: 350px;
   height: 35px;
   justify-content: center;
   align-items: center;
@@ -324,6 +324,7 @@ img {
 .pagination__button {
   display: flex;
   flex: 1;
+  width: 50px;
   height: 100%;
   justify-content: center;
   align-items: center;
@@ -353,6 +354,12 @@ img {
   stroke: #fff;
 }
 
+.pagination__number-wrapper {
+  display: flex;
+  width: 250px;
+  height: 100%;
+}
+
 .pagination__button-next {
   display: flex;
   flex: 1;
@@ -374,9 +381,12 @@ img {
   user-select: none;
 
   &:hover {
-    color: #fff;
     background-color: #1b00ff;
     border-color: #1b00ff;
+
+    svg path {
+      stroke: #fff;
+    }
   }
 }
 
