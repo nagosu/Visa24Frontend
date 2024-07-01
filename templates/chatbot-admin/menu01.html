@@ -204,8 +204,6 @@
                     직업 신고서, 기타
                   </td>
                 </tr>
-              </tbody>
-              <tbody class="usage-history__table-data">
                 <tr class="usage-history__table-container">
                   <td
                     class="usage-history__table-item usage-history__table-item--no"
@@ -239,8 +237,6 @@
                     직업 신고서, 기타
                   </td>
                 </tr>
-              </tbody>
-              <tbody class="usage-history__table-data">
                 <tr class="usage-history__table-container">
                   <td
                     class="usage-history__table-item usage-history__table-item--no"
@@ -282,13 +278,11 @@
             <button class="pagination__button-prev">
               <img src="../../static/chatbot-admin/images/prev-arrow.svg" />
             </button>
-            <button class="pagination__button pagination__button--active">
-              1
-            </button>
-            <button class="pagination__button">2</button>
-            <button class="pagination__button">3</button>
-            <button class="pagination__button">4</button>
-            <button class="pagination__button">5</button>
+            <div class="pagination__number-wrapper">
+              <button class="pagination__button pagination__button--active">
+                1
+              </button>
+            </div>
             <button class="pagination__button-next">
               <img src="../../static/chatbot-admin/images/last-arrow.svg" />
             </button>
@@ -305,6 +299,14 @@
     </div>
 
     <!-- 자바스크립트 -->
+    <script
+      type="module"
+      src="../../static/chatbot-admin/js/menu01.js"
+    ></script>
+    <script
+      type="module"
+      src="../../static/chatbot-admin/js/dummyData/menu01-data.js"
+    ></script>
     <script src="../../static/chatbot-admin/js/navbar.js"></script>
     <script src="../../static/chatbot-admin/js/pagination.js"></script>
     <script src="../../static/chatbot-admin/js/search.js"></script>
