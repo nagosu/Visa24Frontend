@@ -265,7 +265,9 @@
               <!-- 서류작성 비용 -->
               <div class="content-modify__charge-wrapper">
                 <span class="content-modify__charge-text">• 서류작성 : </span>
-                <span class="content-modify__charge-text money">10,000원</span>
+                <span class="content-modify__charge-text money form"
+                  ><span class="money-form"></span>원</span
+                >
                 <img
                   src="../../static/chatbot-admin/images/black-pencil.svg"
                   class="pencil-docs"
@@ -274,7 +276,9 @@
               <!-- 업무대행 비용 -->
               <div class="content-modify__charge-wrapper">
                 <span class="content-modify__charge-text">• 업무대행 : </span>
-                <span class="content-modify__charge-text money">20,000원</span>
+                <span class="content-modify__charge-text money agency"
+                  ><span class="money-agency"></span>원</span
+                >
                 <img
                   src="../../static/chatbot-admin/images/black-pencil.svg"
                   class="pencil-agency"
@@ -355,8 +359,6 @@
                           />
                         </td>
                       </tr>
-                    </tbody>
-                    <tbody class="usage-history__table-data">
                       <tr class="usage-history__table-container">
                         <td
                           class="usage-history__table-item usage-history__table-item--checkbox"
@@ -389,8 +391,6 @@
                           />
                         </td>
                       </tr>
-                    </tbody>
-                    <tbody class="usage-history__table-data">
                       <tr class="usage-history__table-container">
                         <td
                           class="usage-history__table-item usage-history__table-item--checkbox"
@@ -446,7 +446,9 @@
                     class="content-modify__add-list-input form"
                     placeholder="텍스트 입력"
                   />
-                  <button class="content-modify__add-list-button">추가</button>
+                  <button class="content-modify__add-list-button form">
+                    추가
+                  </button>
                 </div>
               </div>
               <!-- 첨부서류 -->
@@ -513,7 +515,9 @@
                     class="content-modify__add-list-input attach"
                     placeholder="텍스트 입력"
                   />
-                  <button class="content-modify__add-list-button">추가</button>
+                  <button class="content-modify__add-list-button attach">
+                    추가
+                  </button>
                 </div>
               </div>
             </div>
@@ -555,6 +559,22 @@
     <!-- 자바스크립트 -->
     <script src="../../static/chatbot-admin/js/navbar.js"></script>
     <script src="../../static/chatbot-admin/js/pagination.js"></script>
-    <script src="../../static/chatbot-admin/js/menu02.js"></script>
+    <script
+      type="module"
+      src="../../static/chatbot-admin/js/menu02.js"
+    ></script>
+    <script
+      type="module"
+      src="../../static/chatbot-admin/js/dummyData/menu02-data.js"
+    ></script>
+    <script>
+      let moneyFormNumber = 10000;
+      let moneyAgencyNumber = 20000;
+      // LocaleString 변환
+      let formattedFormNumber = moneyFormNumber.toLocaleString(); // 숫자에 콤마 추가
+      let formattedAgencyNumber = moneyAgencyNumber.toLocaleString(); // 숫자에 콤마 추가
+      document.querySelector(".money-form").innerText = formattedFormNumber;
+      document.querySelector(".money-agency").innerText = formattedAgencyNumber;
+    </script>
   </body>
 </html>
