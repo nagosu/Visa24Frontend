@@ -1,4 +1,138 @@
+import { dummyTableData } from "./dummyData/menu04-data.js";
+
+async function fetchTableData(type, pageNumber, pageSize = 10) {
+  console.log(type);
+  let dummyData = null; // dummyTableData를 type에 따라 필터링한 데이터를 저장하기 위한 변수
+
+  if (type === "docs") {
+    // 서류작성 버튼 클릭 시
+    dummyData = dummyTableData.filter((item) => item.type === "docs");
+  } else if (type === "agency") {
+    // 업무대행 버튼 클릭 시
+    dummyData = dummyTableData.filter((item) => item.type === "agency");
+  }
+
+  // 페이지네이션 로직
+  const startIndex = (pageNumber - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const paginatedData = dummyData.slice(startIndex, endIndex);
+
+  // 실제 api 호출 로직 추가해야함
+
+  console.log(
+    paginatedData,
+    dummyData.length,
+    pageNumber,
+    pageSize,
+    Math.ceil(dummyData.length / pageSize)
+  );
+
+  return {
+    data: paginatedData,
+    totalItems: dummyTableData.length,
+    currentPage: pageNumber,
+    pageSize: pageSize,
+    totalPages: Math.ceil(dummyTableData.length / pageSize),
+  };
+}
+
+// 테이블에 데이터를 렌더링하는 함수
+function renderTable(data) {
+  const tableBody = document.querySelector(".usage-history__table-data");
+  tableBody.innerHTML = ""; // 기존 데이터 초기화
+
+  data.forEach((item) => {
+    const row = `
+      <tr class="usage-history__table-container">
+                <td
+                  class="usage-history__table-item usage-history__table-item--no"
+                >
+                  1
+                </td>
+                <td
+                  class="usage-history__table-item usage-history__table-item--company"
+                >
+                  ${item.companyName}
+                </td>
+                <td
+                  class="usage-history__table-item usage-history__table-item--representative"
+                >
+                  ${item.representative}
+                </td>
+                <td
+                  class="usage-history__table-item usage-history__table-item--phone"
+                >
+                  ${item.contact}
+                </td>
+                <td
+                  class="usage-history__table-item usage-history__table-item--email"
+                >
+                  ${item.email}
+                </td>
+                <td
+                  class="usage-history__table-item usage-history__table-item--account"
+                >
+                  ${item.account}
+                </td>
+                <td
+                  class="usage-history__table-item usage-history__table-item--holder"
+                >
+                  ${item.accountHolder}
+                </td>
+              </tr>`;
+    tableBody.insertAdjacentHTML("beforeend", row);
+  });
+}
+
+// 페이지네이션 버튼 조절 함수
+function updatePaginationControls(totalPages, currentPage) {
+  const paginationContainer = document.querySelector(".pagination");
+  const numberWrapper = document.querySelector(".pagination__number-wrapper");
+  numberWrapper.innerHTML = ""; // 기존 페이지네이션 초기화
+
+  const maxPagesToShow = 5;
+  let startPage =
+    Math.floor((currentPage - 1) / maxPagesToShow) * maxPagesToShow + 1;
+  let endPage = Math.min(startPage + maxPagesToShow - 1, totalPages);
+
+  const prevButton = document.querySelector(".pagination__button-prev");
+  const nextButton = document.querySelector(".pagination__button-next");
+
+  prevButton.dataset.page = startPage - 1;
+  nextButton.dataset.page = endPage + 1;
+
+  prevButton.disabled = startPage === 1;
+  nextButton.disabled = endPage >= totalPages;
+
+  for (let i = startPage; i <= endPage; i++) {
+    const pageItem = `<button class="pagination__button ${
+      i === currentPage ? "pagination__button--active" : ""
+    }" data-page="${i}">${i}</button>`;
+    numberWrapper.insertAdjacentHTML("beforeend", pageItem);
+  }
+
+  document.querySelectorAll(".pagination__button").forEach((item) => {
+    item.addEventListener("click", () => {
+      const page = parseInt(item.getAttribute("data-page"), 10);
+      if (!isNaN(page)) {
+        loadTableData(page);
+      }
+    });
+  });
+}
+
+// 테이블 데이터를 불러오는 함수
+async function loadTableData(pageNumber = 1, type = "docs") {
+  const { data, totalItems, currentPage, pageSize, totalPages } =
+    await fetchTableData(type, pageNumber);
+
+  renderTable(data);
+  updatePaginationControls(totalPages, currentPage);
+}
+
 document.addEventListener("DOMContentLoaded", function () {
+  loadTableData(); // 페이지 로드 시 서류작성 버튼 클릭한 것과 동일한 데이터를 불러옴
+
   const buttons = document.querySelectorAll(
     ".company-management__button-select"
   );
