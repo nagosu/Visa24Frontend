@@ -37,17 +37,17 @@ async function fetchTableData(type, pageNumber, pageSize = 10) {
 }
 
 // 테이블에 데이터를 렌더링하는 함수
-function renderTable(data) {
+function renderTable(data, currentPage, pageSize) {
   const tableBody = document.querySelector(".usage-history__table-data");
   tableBody.innerHTML = ""; // 기존 데이터 초기화
 
-  data.forEach((item) => {
+  data.forEach((item, index) => {
     const row = `
       <tr class="usage-history__table-container">
                 <td
                   class="usage-history__table-item usage-history__table-item--no"
                 >
-                  1
+                  ${(currentPage - 1) * pageSize + (index + 1)}
                 </td>
                 <td
                   class="usage-history__table-item usage-history__table-item--company"
@@ -119,6 +119,21 @@ function updatePaginationControls(totalPages, currentPage) {
       }
     });
   });
+
+  // 이전, 다음 버튼 클릭 이벤트 리스너 추가
+  prevButton.addEventListener("click", () => {
+    const prevPage = parseInt(prevButton.dataset.page, 10);
+    if (!isNaN(prevPage) && prevPage > 0) {
+      loadTableData(prevPage);
+    }
+  });
+
+  nextButton.addEventListener("click", () => {
+    const nextPage = parseInt(nextButton.dataset.page, 10);
+    if (!isNaN(nextPage) && nextPage <= totalPages) {
+      loadTableData(nextPage);
+    }
+  });
 }
 
 // 테이블 데이터를 불러오는 함수
@@ -126,7 +141,7 @@ async function loadTableData(pageNumber = 1, type = "docs") {
   const { data, totalItems, currentPage, pageSize, totalPages } =
     await fetchTableData(type, pageNumber);
 
-  renderTable(data);
+  renderTable(data, currentPage, pageSize);
   updatePaginationControls(totalPages, currentPage);
 }
 
