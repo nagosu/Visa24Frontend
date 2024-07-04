@@ -3,6 +3,8 @@ import { dummyTableData } from "./dummyData/menu01-data.js";
 const prevButton = document.querySelector(".pagination__button-prev"); // 페이지네이션 이전 버튼
 const nextButton = document.querySelector(".pagination__button-next"); // 페이지네이션 다음 버튼
 
+let data, totalItems, currentPage, pageSize, totalPages;
+
 // 테이블 데이터 API 호출 함수
 async function fetchTableData(pageNumber, pageSize = 10) {
   // const url = "http://example.com"; // 실제 api 호출 주소
@@ -35,13 +37,19 @@ async function fetchTableData(pageNumber, pageSize = 10) {
     console.error(e);
   }
 
-  return {
-    data: paginatedData,
-    totalItems: dummyTableData.length,
-    currentPage: pageNumber,
-    pageSize: pageSize,
-    totalPages: Math.ceil(dummyTableData.length / pageSize),
-  };
+  // return {
+  //   data: paginatedData,
+  //   totalItems: dummyTableData.length,
+  //   currentPage: pageNumber,
+  //   pageSize: pageSize,
+  //   totalPages: Math.ceil(dummyTableData.length / pageSize),
+  // };
+
+  data = paginatedData;
+  totalItems = dummyTableData.length;
+  currentPage = pageNumber;
+  pageSize = pageSize;
+  totalPages = Math.ceil(dummyTableData.length / pageSize);
 }
 
 // 테이블에 데이터를 렌더링하는 함수
@@ -75,10 +83,10 @@ function renderTable(data, currentPage, pageSize) {
   });
 }
 
-// 페이지네이션 버튼 조절 함수
+// 페이지네이션 버튼 보여주는 함수
 function updatePaginationControls(totalPages, currentPage) {
   const paginationContainer = document.querySelector(".pagination");
-  const numberWrapper = document.querySelector(".pagination__number-wrapper");
+  const numberWrapper = document.querySelector(".pagination__number-wrapper"); // 페이지네이션 숫자 버튼이 들어갈 wrapper
   numberWrapper.innerHTML = ""; // 기존 페이지네이션 초기화
 
   const maxPagesToShow = 5;
@@ -86,20 +94,21 @@ function updatePaginationControls(totalPages, currentPage) {
     Math.floor((currentPage - 1) / maxPagesToShow) * maxPagesToShow + 1;
   let endPage = Math.min(startPage + maxPagesToShow - 1, totalPages);
 
-  prevButton.dataset.page = startPage - 1;
-  nextButton.dataset.page = endPage + 1;
+  prevButton.dataset.page = startPage - 5; // 이전 버튼 클릭 시 보여줄 페이지
+  nextButton.dataset.page = endPage + 1; // 다음 버튼 클릭 시 보여줄 페이지
 
-  prevButton.disabled = startPage === 1;
-  nextButton.disabled = endPage >= totalPages;
+  prevButton.disabled = startPage === 1; // 시작페이지가 1인 경우 이전 버튼 비활성화
+  nextButton.disabled = endPage >= totalPages; // 종료페이지가 전체페이지 이상인 경우 다음 버튼 비활성화
 
   for (let i = startPage; i <= endPage; i++) {
-    const pageItem = `<button class="pagination__button ${
+    const pageItem = `<button class="pagination__button number ${
       i === currentPage ? "pagination__button--active" : ""
     }" data-page="${i}">${i}</button>`;
     numberWrapper.insertAdjacentHTML("beforeend", pageItem);
   }
 
-  document.querySelectorAll(".pagination__button").forEach((item) => {
+  document.querySelectorAll(".pagination__button.number").forEach((item) => {
+    console.log(item);
     item.addEventListener("click", () => {
       const page = parseInt(item.getAttribute("data-page"), 10);
       if (!isNaN(page)) {
@@ -107,8 +116,21 @@ function updatePaginationControls(totalPages, currentPage) {
       }
     });
   });
+}
 
-  // 이전, 다음 버튼 클릭 이벤트 리스너 추가
+// 테이블 데이터를 불러오는 함수
+async function loadTableData(pageNumber = 1) {
+  await fetchTableData(pageNumber);
+
+  renderTable(data, currentPage, pageSize);
+  updatePaginationControls(totalPages, currentPage);
+}
+
+// DOM 로드 시 실행
+document.addEventListener("DOMContentLoaded", () => {
+  loadTableData();
+
+  // 이전 버튼 클릭 이벤트 리스너 추가
   prevButton.addEventListener("click", () => {
     const prevPage = parseInt(prevButton.dataset.page, 10);
     if (!isNaN(prevPage) && prevPage > 0) {
@@ -116,22 +138,11 @@ function updatePaginationControls(totalPages, currentPage) {
     }
   });
 
+  // 다음 버튼 클릭 이벤트 리스너 추가
   nextButton.addEventListener("click", () => {
     const nextPage = parseInt(nextButton.dataset.page, 10);
     if (!isNaN(nextPage) && nextPage <= totalPages) {
       loadTableData(nextPage);
     }
   });
-}
-
-// 테이블 데이터를 불러오는 함수
-async function loadTableData(pageNumber = 1) {
-  const { data, totalItems, currentPage, pageSize, totalPages } =
-    await fetchTableData(pageNumber);
-
-  renderTable(data, currentPage, pageSize);
-  updatePaginationControls(totalPages, currentPage);
-}
-
-// DOM 로드 시 실행
-document.addEventListener("DOMContentLoaded", () => loadTableData());
+});
