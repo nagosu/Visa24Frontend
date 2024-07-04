@@ -5,7 +5,7 @@ const nextButton = document.querySelector(".pagination__button-next"); // 페이
 
 let data, totalItems, currentPage, pageSize, totalPages;
 
-async function fetchTableData(pageNumber, pageSize = 10) {
+async function fetchTableData(pageNumber, pageSize) {
   // const url = "http://example.com"; // 실제 api 호출 주소
 
   // 페이지네이션 로직
@@ -138,8 +138,8 @@ function updatePaginationControls(totalPages, currentPage) {
 }
 
 // 테이블 데이터를 불러오는 함수
-async function loadTableData(pageNumber = 1, pageSize = 10) {
-  await fetchTableData(pageNumber);
+async function loadTableData(pageNumber = 1, pageSize = 20) {
+  await fetchTableData(pageNumber, pageSize);
 
   renderTable(data, currentPage, pageSize);
   updatePaginationControls(totalPages, currentPage);

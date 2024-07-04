@@ -1,4 +1,3 @@
-import { UNSAFE_useRouteId } from "react-router-dom";
 import { dummyTableData } from "./dummyData/menu04-data.js";
 const buttons = document.querySelectorAll(".company-management__button-select"); // 서류작성, 업무대행 버튼
 const prevButton = document.querySelector(".pagination__button-prev"); // 페이지네이션 이전 버튼
@@ -132,7 +131,6 @@ function updatePaginationControls(totalPages, currentPage) {
 
 // 테이블 데이터를 불러오는 함수
 async function loadTableData(pageNumber = 1, pageSize = 10, type = "docs") {
-  console.log(pageNumber, pageSize, type);
   await fetchTableData(type, pageNumber, pageSize);
 
   renderTable(data, currentPage, pageSize);

@@ -2,12 +2,17 @@ import { dummyTableData } from "./dummyData/menu01-data.js";
 
 const prevButton = document.querySelector(".pagination__button-prev"); // 페이지네이션 이전 버튼
 const nextButton = document.querySelector(".pagination__button-next"); // 페이지네이션 다음 버튼
+const categorySelect = document.getElementById("categorySelect"); // 카테고리 선택 드롭다운
+const searchInput = document.getElementById("searchInput"); // 검색어 입력창
+const searchButton = document.querySelector(".search-bar__input-icon"); // 검색 버튼
 
 let data, totalItems, currentPage, pageSize, totalPages;
+let selectedCategory = "카테고리 명"; // 선택한 카테고리를 저장할 변수
+let searchKeyword = ""; // 입력한 검색어를 저장할 변수
 
 // 테이블 데이터 API 호출 함수
 async function fetchTableData(pageNumber, pageSize) {
-  // const url = "http://example.com"; // 실제 api 호출 주소
+  // const url = `http://example.com/api/data?pageNumber=${pageNumber}&pageSize=${pageSize}&category=${selectedCategory}&keyword=${searchKeyword}`; // 실제 api 호출 주소
 
   // 페이지네이션 로직
   const startIndex = (pageNumber - 1) * pageSize;
@@ -17,7 +22,7 @@ async function fetchTableData(pageNumber, pageSize) {
   // 실제 api 호출 로직 추가해야함
   try {
     // const response = await fetch(
-    //   `url?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+    //   url,
     //   {
     //     method: "GET",
     //     headers: {
@@ -129,6 +134,28 @@ async function loadTableData(pageNumber = 1, pageSize = 20) {
 // DOM 로드 시 실행
 document.addEventListener("DOMContentLoaded", () => {
   loadTableData();
+
+  // 카테고리 선택 이벤트 리스너 추가
+  categorySelect.addEventListener("change", (event) => {
+    selectedCategory = event.target.value;
+    console.log("Selected Category:", selectedCategory);
+  });
+
+  // 검색어 입력 이벤트 리스너 추가
+  searchInput.addEventListener("input", (event) => {
+    searchKeyword = event.target.value;
+    console.log("Search Keyword:", searchKeyword);
+  });
+
+  // 검색 버튼 클릭 이벤트 리스너 추가
+  searchButton.addEventListener("click", loadTableData);
+
+  // 검색어 입력창에서 엔터키 이벤트 리스너 추가
+  searchInput.addEventListener("keypress", (event) => {
+    if (event.key === "Enter") {
+      loadTableData();
+    }
+  });
 
   // 이전 버튼 클릭 이벤트 리스너 추가
   prevButton.addEventListener("click", () => {

@@ -1,6 +1,6 @@
 const dummyTableData = [];
 
-for (let i = 1; i <= 200; i++) {
+for (let i = 1; i <= 400; i++) {
   dummyTableData.push({
     id: i,
     date: "24.06.09 10:12:51",

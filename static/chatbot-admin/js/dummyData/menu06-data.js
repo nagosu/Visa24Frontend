@@ -1,6 +1,6 @@
 const dummyTableData = [];
 
-for (let i = 1; i <= 200; i++) {
+for (let i = 1; i <= 400; i++) {
   dummyTableData.push({
     id: i,
     username: `user${i}`,

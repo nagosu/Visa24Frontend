@@ -1,6 +1,6 @@
 const dummyTableData = [];
 
-for (let i = 1; i <= 200; i++) {
+for (let i = 1; i <= 400; i++) {
   dummyTableData.push({
     id: i,
     companyName: `${i} 대행`,
@@ -13,7 +13,7 @@ for (let i = 1; i <= 200; i++) {
   });
 }
 
-for (let i = 201; i <= 400; i++) {
+for (let i = 401; i <= 800; i++) {
   dummyTableData.push({
     id: i,
     companyName: `${i} 대행`,
