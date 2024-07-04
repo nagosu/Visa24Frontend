@@ -6,7 +6,7 @@ const nextButton = document.querySelector(".pagination__button-next"); // 페이
 let data, totalItems, currentPage, pageSize, totalPages;
 
 // 테이블 데이터 API 호출 함수
-async function fetchTableData(pageNumber, pageSize = 10) {
+async function fetchTableData(pageNumber, pageSize) {
   // const url = "http://example.com"; // 실제 api 호출 주소
 
   // 페이지네이션 로직
@@ -61,7 +61,7 @@ function renderTable(data, currentPage, pageSize) {
     const row = `
       <tr class="usage-history__table-container">
           <td class="usage-history__table-item usage-history__table-item--no">${
-            (currentPage - 1) * 10 + (index + 1)
+            (currentPage - 1) * pageSize + (index + 1)
           }</td>
           <td class="usage-history__table-item usage-history__table-item--date">${
             item.date
@@ -119,8 +119,8 @@ function updatePaginationControls(totalPages, currentPage) {
 }
 
 // 테이블 데이터를 불러오는 함수
-async function loadTableData(pageNumber = 1) {
-  await fetchTableData(pageNumber);
+async function loadTableData(pageNumber = 1, pageSize = 20) {
+  await fetchTableData(pageNumber, pageSize);
 
   renderTable(data, currentPage, pageSize);
   updatePaginationControls(totalPages, currentPage);

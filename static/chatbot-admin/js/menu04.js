@@ -1,6 +1,12 @@
 import { dummyTableData } from "./dummyData/menu04-data.js";
+const buttons = document.querySelectorAll(".company-management__button-select"); // 서류작성, 업무대행 버튼
+const prevButton = document.querySelector(".pagination__button-prev"); // 페이지네이션 이전 버튼
+const nextButton = document.querySelector(".pagination__button-next"); // 페이지네이션 다음 버튼
 
-async function fetchTableData(type, pageNumber, pageSize = 10) {
+let data, totalItems, currentPage, pageSize, totalPages;
+let currentType = "docs"; // 현재 선택된 버튼의 타입
+
+async function fetchTableData(type, pageNumber, pageSize) {
   console.log(type);
   let dummyData = null; // dummyTableData를 type에 따라 필터링한 데이터를 저장하기 위한 변수
 
@@ -27,13 +33,18 @@ async function fetchTableData(type, pageNumber, pageSize = 10) {
     Math.ceil(dummyData.length / pageSize)
   );
 
-  return {
-    data: paginatedData,
-    totalItems: dummyTableData.length,
-    currentPage: pageNumber,
-    pageSize: pageSize,
-    totalPages: Math.ceil(dummyTableData.length / pageSize),
-  };
+  // return {
+  //   data: paginatedData,
+  //   totalItems: dummyTableData.length,
+  //   currentPage: pageNumber,
+  //   pageSize: pageSize,
+  //   totalPages: Math.ceil(dummyTableData.length / pageSize),
+  // };
+  data = paginatedData;
+  totalItems = dummyData.length;
+  currentPage = pageNumber;
+  pageSize = pageSize;
+  totalPages = Math.ceil(dummyData.length / pageSize);
 }
 
 // 테이블에 데이터를 렌더링하는 함수
@@ -95,17 +106,14 @@ function updatePaginationControls(totalPages, currentPage) {
     Math.floor((currentPage - 1) / maxPagesToShow) * maxPagesToShow + 1;
   let endPage = Math.min(startPage + maxPagesToShow - 1, totalPages);
 
-  const prevButton = document.querySelector(".pagination__button-prev");
-  const nextButton = document.querySelector(".pagination__button-next");
+  prevButton.dataset.page = startPage - 5; // 이전 버튼 클릭 시 보여줄 페이지
+  nextButton.dataset.page = endPage + 1; // 다음 버튼 클릭 시 보여줄 페이지
 
-  prevButton.dataset.page = startPage - 1;
-  nextButton.dataset.page = endPage + 1;
-
-  prevButton.disabled = startPage === 1;
-  nextButton.disabled = endPage >= totalPages;
+  prevButton.disabled = startPage === 1; // 시작페이지가 1인 경우 이전 버튼 비활성화
+  nextButton.disabled = endPage >= totalPages; // 끝페이지가 마지막 페이지인 경우 다음 버튼 비활성화
 
   for (let i = startPage; i <= endPage; i++) {
-    const pageItem = `<button class="pagination__button ${
+    const pageItem = `<button class="pagination__button number ${
       i === currentPage ? "pagination__button--active" : ""
     }" data-page="${i}">${i}</button>`;
     numberWrapper.insertAdjacentHTML("beforeend", pageItem);
@@ -115,49 +123,51 @@ function updatePaginationControls(totalPages, currentPage) {
     item.addEventListener("click", () => {
       const page = parseInt(item.getAttribute("data-page"), 10);
       if (!isNaN(page)) {
-        loadTableData(page);
+        loadTableData(page, pageSize, currentType);
       }
     });
-  });
-
-  // 이전, 다음 버튼 클릭 이벤트 리스너 추가
-  prevButton.addEventListener("click", () => {
-    const prevPage = parseInt(prevButton.dataset.page, 10);
-    if (!isNaN(prevPage) && prevPage > 0) {
-      loadTableData(prevPage);
-    }
-  });
-
-  nextButton.addEventListener("click", () => {
-    const nextPage = parseInt(nextButton.dataset.page, 10);
-    if (!isNaN(nextPage) && nextPage <= totalPages) {
-      loadTableData(nextPage);
-    }
   });
 }
 
 // 테이블 데이터를 불러오는 함수
-async function loadTableData(pageNumber = 1, type = "docs") {
-  const { data, totalItems, currentPage, pageSize, totalPages } =
-    await fetchTableData(type, pageNumber);
+async function loadTableData(pageNumber = 1, pageSize = 10, type = "docs") {
+  console.log(pageNumber, pageSize, type);
+  await fetchTableData(type, pageNumber, pageSize);
 
   renderTable(data, currentPage, pageSize);
   updatePaginationControls(totalPages, currentPage);
 }
 
+// DOM 로드 시 실행
 document.addEventListener("DOMContentLoaded", function () {
   loadTableData(); // 페이지 로드 시 서류작성 버튼 클릭한 것과 동일한 데이터를 불러옴
 
-  const buttons = document.querySelectorAll(
-    ".company-management__button-select"
-  );
+  // 이전 버튼 클릭 이벤트 리스너 추가
+  prevButton.addEventListener("click", () => {
+    const prevPage = parseInt(prevButton.dataset.page, 10);
+    if (!isNaN(prevPage) && prevPage > 0) {
+      loadTableData(prevPage, pageSize, currentType);
+    }
+  });
 
+  // 다음 버튼 클릭 이벤트 리스너 추가
+  nextButton.addEventListener("click", () => {
+    const nextPage = parseInt(nextButton.dataset.page, 10);
+    if (!isNaN(nextPage) && nextPage <= totalPages) {
+      loadTableData(nextPage, pageSize, currentType);
+    }
+  });
+
+  // 서류작성, 업무대행 버튼 클릭 이벤트 추가
   buttons.forEach((button) => {
     button.addEventListener("click", function () {
       // 모든 버튼의 active 클래스를 제거
       buttons.forEach((btn) => btn.classList.remove("active"));
       // 클릭된 버튼에 active 클래스 추가
       this.classList.add("active");
+
+      currentType = this.classList.contains("primary") ? "docs" : "agency"; // 현재 선택된 버튼의 타입 저장
+      loadTableData(1, pageSize, currentType); // 첫 페이지부터 다시 로드
     });
   });
 
