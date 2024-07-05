@@ -52,8 +52,12 @@ const inputAttach = document.querySelector(
 ); // 첨부서류 목록 추가 input
 
 let category1, category2, category3, category4, category5; // 1~5차 카테고리 선택 값을 저장하는 변수
+
 let rowToDelete = null; // 삭제할 row를 저장하는 변수
 let allSelected = true; // 모든 카테고리가 선택되었는지 확인하는 변수
+
+let formCost = 10000; // 서류작성 비용을 저장하는 변수
+let agencyCost = 20000; // 업무대행 비용을 저장하는 변수
 
 // 조회 오류 모달 창 열기 함수
 function openSearchModal() {
@@ -204,6 +208,14 @@ async function fetchCategoryData() {
   if (!allSelected) {
     modalFind.style.display = "flex";
   } else {
+    console.log("카테고리", {
+      category1,
+      category2,
+      category3,
+      category4,
+      category5,
+    });
+
     const data = dummyCategoryData; // 더미 데이터
 
     // 실제 api 연동 로직 추가해야함
@@ -263,7 +275,6 @@ async function fetchCategoryData() {
 
     // 새로 생성된 삭제 버튼에 이벤트 리스너 등록
     const newDeleteIcons = document.querySelectorAll(".trash-icon");
-    console.log(newDeleteIcons);
     newDeleteIcons.forEach((button) => {
       button.addEventListener("click", function (event) {
         rowToDelete = event.target.closest("tr"); // 삭제할 row 저장
@@ -306,8 +317,17 @@ function addPencilClickListener(className) {
     input.addEventListener("blur", function () {
       const newSpan = document.createElement("span");
       newSpan.className = "content-modify__charge-text money";
-      newSpan.innerText = input.value;
+      newSpan.innerText = parseInt(input.value, 10).toLocaleString(); // 세자리 단위로 콤마 추가
       input.replaceWith(newSpan);
+
+      // 수정된 값을 변수에 저장
+      if (className === "pencil-docs") {
+        formCost = parseInt(input.value.replace(/,/g, ""), 10); // 콤마 제거 후 저장
+        console.log(formCost);
+      } else {
+        agencyCost = parseInt(input.value.replace(/,/g, ""), 10); // 콤마 제거 후 저장
+        console.log(agencyCost);
+      }
     });
 
     input.addEventListener("keydown", function (event) {
