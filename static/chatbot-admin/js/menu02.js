@@ -349,6 +349,40 @@ function addPencilClickListener(className) {
   });
 }
 
+async function addDocument(documentType, documentName) {
+  // const url = "endpoint" // 실제 API 주소
+  try {
+    // const response = await fetch(url, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     category1,
+    //     category2,
+    //     category3,
+    //     category4,
+    //     category5,
+    //     documentType,
+    //     documentName,
+    //   }),
+    // });
+    // const result = await response.json();
+    console.log("서류 추가 완료", {
+      category1: category1,
+      category2: category2,
+      category3: category3,
+      category4: category4,
+      category5: category5,
+      documentType: documentType,
+      documentName: documentName,
+    });
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+// 업무 비용 수정 API 연동 함수
 async function updateTaskCost() {
   // const url = "endpoint" // 실제 API 주소
   try {
@@ -358,14 +392,57 @@ async function updateTaskCost() {
     //     "Content-Type": "application/json",
     //   },
     //   body: JSON.stringify({
+    //     category1,
+    //     category2,
+    //     category3,
+    //     category4,
+    //     category5,
     //     formCost,
     //     agencyCost,
     //   }),
     // });
     // const result = await response.json();
     console.log("업무 비용 수정 완료", {
+      category1: category1,
+      category2: category2,
+      category3: category3,
+      category4: category4,
+      category5: category5,
       formCost: formCost,
       agencyCost: agencyCost,
+    });
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function deleteDocument(documentId, documentType) {
+  // const url = "endpoint" // 실제 API 주소
+  try {
+    // const response = await fetch(url, {
+    //   method: "DELETE",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     category1,
+    //     category2,
+    //     category3,
+    //     category4,
+    //     category5,
+    //     documentId,
+    //     documentType,
+    //   }),
+    // });
+    // const result = await response.json();
+    console.log("서류 삭제 완료", {
+      category1: category1,
+      category2: category2,
+      category3: category3,
+      category4: category4,
+      category5: category5,
+      documentId: documentId,
+      documentType: documentType,
     });
   } catch (e) {
     console.error(e);
@@ -404,6 +481,15 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   modalDeleteSaveButton.addEventListener("click", function () {
     if (rowToDelete) {
+      const documentId = 1; // 삭제할 서류 id (실제 id로 변경 필요)
+      const documentType = rowToDelete
+        .closest("table")
+        .classList.contains("form")
+        ? "form"
+        : "attach"; // 서류 유형
+
+      deleteDocument(documentId, documentType); // 서류 삭제 API 호출
+
       rowToDelete.remove(); // row 삭제
       rowToDelete = null; // 변수 초기화
     }
@@ -415,6 +501,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const value = inputForm.value.trim(); // 입력값
 
     if (value) {
+      addDocument("form", value); // 양식서류 추가 API 호출
+
       const newRow = `
     <tr class="usage-history__table-container">
       <td class="usage-history__table-item usage-history__table-item--checkbox">
@@ -446,6 +534,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const value = inputAttach.value.trim(); // 입력값
 
     if (value) {
+      addDocument("attach", value); // 첨부서류 추가 API 호출
+
       const newRow = `
       <tr class="usage-history__table-container">
         <td class="usage-history__table-item usage-history__table-item--checkbox">
