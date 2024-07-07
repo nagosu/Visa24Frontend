@@ -229,6 +229,19 @@ function addEditModeEventListeners() {
     ".agency__info-input-wrapper.fourth button"
   );
   saveButtonEdit.addEventListener("click", function () {
+    const rowData = {
+      id: currentRow.querySelectorAll(".usage-history__table-item--no")[1]
+        .innerText,
+      companyName: modalInputCompany.value,
+      representative: modalInputRepresentative.value,
+      contact: modalInputPhone.value,
+      email: modalInputEmail.value,
+      account: modalInputAccount.value,
+      accountHolder: modalInputHolder.value,
+    };
+
+    editTableRow(rowData); // 테이블 업데이트 API 호출
+
     // 현재 row의 데이터 업데이트
     const cells = currentRow.querySelectorAll(".usage-history__table-item");
     cells[2].innerText = modalInputCompany.value;
@@ -279,6 +292,25 @@ function addEditModeEventListeners() {
       });
     });
   });
+}
+
+async function editTableRow(rowData) {
+  // const url = "http://example.com/api/edit"; // 실제 API 주소
+  // 수정 API 호출 로직 추가해야함
+  // try {
+  //   const response = await fetch(url, {
+  //     method: "PUT",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(rowData),
+  //   });
+  //   const result = await response.json();
+  // } catch (e) {
+  //   console.error("Edit API 호출 실패", e);
+  // }
+
+  console.log("테이블 수정 API 호출 성공", { rowData });
 }
 
 async function deleteTableRow(id) {
@@ -384,12 +416,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 검색 버튼 클릭 이벤트 리스너 추가
   searchButton.addEventListener("click", () => {
+    if (selectedCategory === "카테고리 명" || searchKeyword === "") {
+      return;
+    }
     loadTableData();
   });
 
   // 검색어 입력창에서 엔터키 이벤트 리스너 추가
   searchInput.addEventListener("keypress", (event) => {
     if (event.key === "Enter") {
+      if (selectedCategory === "카테고리 명" || searchKeyword === "") {
+        return;
+      }
       loadTableData();
     }
   });
@@ -427,7 +465,7 @@ document.addEventListener("DOMContentLoaded", function () {
   editButton.addEventListener("click", () => {
     if (editMode) {
       editMode = false;
-      loadTableData(currentPage, pageSize, currentType);
+      this.location.reload(); // 페이지 새로고침
     } else {
       editMode = true;
       renderEditTable(data, currentPage, pageSize);
