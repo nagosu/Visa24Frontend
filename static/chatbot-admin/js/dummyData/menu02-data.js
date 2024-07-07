@@ -25,6 +25,15 @@ const dummyCategoryData = {
     {
       list: "사증발급 신청서",
     },
+    {
+      list: "EXAMPLE 1",
+    },
+    {
+      list: "EXAMPLE 2",
+    },
+    {
+      list: "EXAMPLE 3",
+    },
   ],
 };
 

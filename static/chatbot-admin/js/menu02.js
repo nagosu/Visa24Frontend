@@ -219,7 +219,7 @@ async function fetchCategoryData() {
     const data = dummyCategoryData; // 더미 데이터
 
     // 실제 api 연동 로직 추가해야함
-    // const response = await fetch("endpoint", {});
+    // const url = "endpoint" // 실제 API 주소
 
     // 양식서류 테이블 업데이트
     formTableBody.innerHTML = ""; // 기존 데이터 초기화
@@ -298,7 +298,7 @@ function addPencilClickListener(className) {
   const pencilIcon = document.querySelector(`.${className}`);
   pencilIcon.addEventListener("click", function () {
     const span = pencilIcon.previousElementSibling.querySelector("span");
-    const value = span.innerText;
+    const value = span.innerText.replace(/,/g, ""); // 콤마 제거
     const input = document.createElement("input");
     input.type = "text";
     if (className === "pencil-docs") {
@@ -313,11 +313,19 @@ function addPencilClickListener(className) {
     input.focus();
     input.setSelectionRange(value.length, value.length);
 
+    // 숫자만 입력되도록 제한
+    input.addEventListener("input", function () {
+      this.value = this.value.replace(/[^0-9]/g, "");
+    });
+
     // Enter key 이벤트로 다시 span으로 변경
     input.addEventListener("blur", function () {
       const newSpan = document.createElement("span");
       newSpan.className = "content-modify__charge-text money";
-      newSpan.innerText = parseInt(input.value, 10).toLocaleString(); // 세자리 단위로 콤마 추가
+      newSpan.innerText = parseInt(
+        input.value.replace(/,/g, ""),
+        10
+      ).toLocaleString(); // 세자리 단위로 콤마 추가
       input.replaceWith(newSpan);
 
       // 수정된 값을 변수에 저장
@@ -328,14 +336,40 @@ function addPencilClickListener(className) {
         agencyCost = parseInt(input.value.replace(/,/g, ""), 10); // 콤마 제거 후 저장
         console.log(agencyCost);
       }
+
+      updateTaskCost(); // 업무 비용 수정 API 호출
     });
 
     input.addEventListener("keydown", function (event) {
       if (event.key === "Enter") {
         input.blur();
+        updateTaskCost(); // 업무 비용 수정 API 호출
       }
     });
   });
+}
+
+async function updateTaskCost() {
+  // const url = "endpoint" // 실제 API 주소
+  try {
+    // const response = await fetch(url, {
+    //   method: "PUT",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     formCost,
+    //     agencyCost,
+    //   }),
+    // });
+    // const result = await response.json();
+    console.log("업무 비용 수정 완료", {
+      formCost: formCost,
+      agencyCost: agencyCost,
+    });
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 // 서류 테이블에 목록 추가 함수
