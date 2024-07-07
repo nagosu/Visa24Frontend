@@ -289,6 +289,22 @@ function handleFileRefreshClick(event) {
   }
 }
 
+function handleStatusRefreshClick(event) {
+  const refreshIcon = event.target;
+  const statusContainer = refreshIcon.closest("td");
+  const newStatus = "다운 금지";
+
+  // 상태 변경
+  statusContainer.innerHTML = `
+  <span>${newStatus}</span>
+  `;
+
+  // 상태 업데이트 API 호출
+  const documentId = 1; // 수정할 서류 id (실제 id로 변경 필요)
+  const documentType = "form";
+  updateDocumentStatus(documentId, documentType, newStatus);
+}
+
 // 카테고리에 따른 양식서류, 첨부서류 조회 API 연동 함수
 async function fetchCategoryData() {
   categorySelects.forEach((select, index) => {
@@ -613,6 +629,41 @@ async function updateDocumentFile(documentId, documentType, newFile) {
   }
 }
 
+async function updateDocumentStatus(documentId, documentType, newStatus) {
+  // const url = "endpoint" // 실제 API 주소
+  try {
+    // const response = await fetch(url, {
+    //   method: "PUT",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     category1,
+    //     category2,
+    //     category3,
+    //     category4,
+    //     category5,
+    //     documentId,
+    //    documentType,
+    //     newStatus,
+    //   }),
+    // });
+    // const result = await response.json();
+    console.log("서류 상태 수정 완료", {
+      category1: category1,
+      category2: category2,
+      category3: category3,
+      category4: category4,
+      category5: category5,
+      documentId: documentId,
+      documentType: documentType,
+      newStatus: newStatus,
+    });
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 // 서류 삭제 API 연동 함수
 async function deleteDocument(documentId, documentType) {
   // const url = "endpoint" // 실제 API 주소
@@ -659,7 +710,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 저장 모달 취소/확인 버튼 클릭 시 모달 창 닫기
   modalCancelButton.addEventListener("click", closeSaveModal);
-  modalSaveButton.addEventListener("click", closeSaveModal);
+  modalSaveButton.addEventListener("click", () => {
+    closeSaveModal();
+    location.reload(); // 저장 후 새로고침
+  });
 
   // 삭제 버튼 클릭 시 모달 창 열기
   deleteIcon.forEach((button) => {
@@ -761,6 +815,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     if (event.target.classList.contains("upload-button")) {
       handleFileUploadClick(event);
+    }
+    if (event.target.classList.contains("refresh-status")) {
+      handleStatusRefreshClick(event);
     }
   });
 
