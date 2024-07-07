@@ -37,6 +37,8 @@ async function fetchTableData(pageNumber, pageSize) {
       currentPage: pageNumber,
       pageSize: pageSize,
       totalPages: Math.ceil(dummyTableData.length / pageSize),
+      selectedCategory: selectedCategory,
+      searchKeyword: searchKeyword,
     });
   } catch (e) {
     console.error(e);
@@ -148,7 +150,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // 검색 버튼 클릭 이벤트 리스너 추가
-  searchButton.addEventListener("click", loadTableData);
+  searchButton.addEventListener("click", () => {
+    loadTableData();
+  });
 
   // 검색어 입력창에서 엔터키 이벤트 리스너 추가
   searchInput.addEventListener("keypress", (event) => {

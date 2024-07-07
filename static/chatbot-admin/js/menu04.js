@@ -2,9 +2,19 @@ import { dummyTableData } from "./dummyData/menu04-data.js";
 const buttons = document.querySelectorAll(".company-management__button-select"); // 서류작성, 업무대행 버튼
 const prevButton = document.querySelector(".pagination__button-prev"); // 페이지네이션 이전 버튼
 const nextButton = document.querySelector(".pagination__button-next"); // 페이지네이션 다음 버튼
+const categorySelect = document.getElementById("categorySelect"); // 카테고리 선택 드롭다운
+const searchInput = document.getElementById("searchInput"); // 검색어 입력창
+const searchButton = document.querySelector(".search-bar__input-icon"); // 검색 버튼
+const editButton = document.querySelector(".company-management__button-edit"); // 테이블 편집 버튼
+const tableHeader = document.querySelector(".usage-history__table-header"); // 테이블 헤더
+const tableDataRows = document.querySelectorAll(".usage-history__table-data"); // 테이블 데이터 행 목록
 
 let data, totalItems, currentPage, pageSize, totalPages;
+let selectedCategory = "카테고리 명"; // 선택한 카테고리를 저장할 변수
+let searchKeyword = ""; // 입력한 검색어를 저장할 변수
 let currentType = "docs"; // 현재 선택된 버튼의 타입
+let deletedRows = []; // 삭제된 행을 저장하기 위한 배열
+let editMode = false; // 테이블 편집 모드인지 여부
 
 async function fetchTableData(type, pageNumber, pageSize) {
   console.log(type);
@@ -25,13 +35,15 @@ async function fetchTableData(type, pageNumber, pageSize) {
 
   // 실제 api 호출 로직 추가해야함
 
-  console.log(
-    paginatedData,
-    dummyData.length,
-    pageNumber,
-    pageSize,
-    Math.ceil(dummyData.length / pageSize)
-  );
+  console.log("API 호출 성공", {
+    data: paginatedData,
+    totalItems: dummyTableData.length,
+    currentPage: pageNumber,
+    pageSize: pageSize,
+    totalPages: Math.ceil(dummyTableData.length / pageSize),
+    selectedCategory: selectedCategory,
+    searchKeyword: searchKeyword,
+  });
 
   // return {
   //   data: paginatedData,
@@ -129,6 +141,152 @@ function updatePaginationControls(totalPages, currentPage) {
   });
 }
 
+function editTable(data, currentPage, pageSize) {
+  // 완료 버튼 클릭 시 원래 상태로 되돌리기
+  if (editMode) {
+    location.reload(); // 페이지 새로고침으로 원래 상태 복구
+    return;
+  }
+
+  // 테이블 헤더 변경
+  tableHeader.innerHTML = `
+    <tr class="usage-history__table-container">
+      <th class="usage-history__table-item usage-history__table-item--no"></th>
+      <th class="usage-history__table-item usage-history__table-item--no">No.</th>
+      <th class="usage-history__table-item usage-history__table-item--company">업체명</th>
+      <th class="usage-history__table-item usage-history__table-item--representative">대표자</th>
+      <th class="usage-history__table-item usage-history__table-item--phone">연락처</th>
+      <th class="usage-history__table-item usage-history__table-item--email">이메일</th>
+      <th class="usage-history__table-item usage-history__table-item--account">계좌번호</th>
+      <th class="usage-history__table-item usage-history__table-item--holder">예금주</th>
+      <th class="usage-history__table-item usage-history__table-item--no"></th>
+      <th class="usage-history__table-item usage-history__table-item--no"></th>
+    </tr>
+  `;
+
+  const tableBody = document.querySelector(".usage-history__table-data");
+  tableBody.innerHTML = ""; // 기존 데이터 초기화
+
+  // 테이블 데이터 변경
+  data.forEach((item, index) => {
+    // const cells = item.querySelectorAll(".usage-history__table-item");
+
+    // 각 셀의 텍스트를 가져와서 새로운 구조에 맞게 배치
+    // const no = cells[0].innerText;
+    // const company = cells[1].innerText;
+    // const representative = cells[2].innerText;
+    // const phone = cells[3].innerText;
+    // const email = cells[4].innerText;
+    // const account = cells[5].innerText;
+    // const holder = cells[6].innerText;
+
+    const row = `
+          <tr class="usage-history__table-container">
+            <td class="usage-history__table-item usage-history__table-item--no">
+              <img src="../../static/chatbot-admin/images/Fluid.svg" />
+            </td>
+            <td class="usage-history__table-item usage-history__table-item--no">${
+              (currentPage - 1) * pageSize + (index + 1)
+            }</td>
+            <td class="usage-history__table-item usage-history__table-item--company">${
+              item.companyName
+            }</td>
+            <td class="usage-history__table-item usage-history__table-item--representative">${
+              item.representative
+            }</td>
+            <td class="usage-history__table-item usage-history__table-item--phone">${
+              item.contact
+            }</td>
+            <td class="usage-history__table-item usage-history__table-item--email">${
+              item.email
+            }</td>
+            <td class="usage-history__table-item usage-history__table-item--account">${
+              item.account
+            }</td>
+            <td class="usage-history__table-item usage-history__table-item--holder">${
+              item.accountHolder
+            }</td>
+            <th class="usage-history__table-item usage-history__table-item--no edit-icon">
+              <img src="../../static/chatbot-admin/images/Edit_fill.svg" />
+            </th>
+            <th class="usage-history__table-item usage-history__table-item--no delete-icon">
+              <img src="../../static/chatbot-admin/images/Trash.svg" class="agency-delete"/>
+            </th>
+          </tr>
+        `;
+    tableBody.insertAdjacentHTML("beforeend", row);
+  });
+
+  // 버튼을 "완료" 버튼으로 변경
+  editButton.innerHTML = `
+    <span class="company-management__button-edit-text">완료</span>
+    <img src="../../static/chatbot-admin/images/white-pencil.svg" />
+  `;
+  editButton.classList.add("done");
+
+  editMode = true; // 테이블 편집 모드로 변경
+
+  // Edit 아이콘 클릭 이벤트 추가
+  const editIcons = document.querySelectorAll(".edit-icon img");
+  const modal = document.querySelector(".modal-background.edit");
+  const modalInputCompany = modal.querySelector(
+    ".agency__info-input.company input"
+  );
+  const modalInputRepresentative = modal.querySelector(
+    ".agency__info-input.representative input"
+  );
+  const modalInputPhone = modal.querySelector(
+    ".agency__info-input.phone input"
+  );
+  const modalInputEmail = modal.querySelector(
+    ".agency__info-input.email input"
+  );
+  const modalInputAccount = modal.querySelector(
+    ".agency__info-input.account input:nth-child(2)"
+  );
+  const modalInputHolder = modal.querySelector(
+    ".agency__info-input.holder input"
+  );
+  let currentRow; // 현재 선택된 row를 저장하기 위한 변수
+
+  // Edit 아이콘 클릭 이벤트 추가
+  editIcons.forEach((icon) => {
+    icon.addEventListener("click", function () {
+      currentRow = this.closest("tr"); // 현재 클릭된 row 저장
+      const cells = currentRow.querySelectorAll(".usage-history__table-item");
+
+      // 모달 input 필드에 현재 row의 데이터 채우기
+      modalInputCompany.value = cells[2].innerText;
+      modalInputRepresentative.value = cells[3].innerText;
+      modalInputPhone.value = cells[4].innerText;
+      modalInputEmail.value = cells[5].innerText;
+      modalInputAccount.value = cells[6].innerText;
+      modalInputHolder.value = cells[7].innerText;
+
+      // 모달을 표시
+      modal.style.display = "flex";
+    });
+  });
+
+  // "등록하기" 버튼 클릭 이벤트 추가 (모달 닫기 및 데이터 업데이트 기능 포함)
+  const saveButtonEdit = modal.querySelector(
+    ".agency__info-input-wrapper.fourth button"
+  );
+  saveButtonEdit.addEventListener("click", function () {
+    // 현재 row의 데이터 업데이트
+    const cells = currentRow.querySelectorAll(".usage-history__table-item");
+    cells[2].innerText = modalInputCompany.value;
+    cells[3].innerText = modalInputRepresentative.value;
+    cells[4].innerText = modalInputPhone.value;
+    cells[5].innerText = modalInputEmail.value;
+    cells[6].innerText = modalInputAccount.value;
+    cells[7].innerText = modalInputHolder.value;
+
+    // 모달을 닫기
+    modal.style.display = "none";
+  });
+}
+
 // 테이블 데이터를 불러오는 함수
 async function loadTableData(pageNumber = 1, pageSize = 10, type = "docs") {
   await fetchTableData(type, pageNumber, pageSize);
@@ -140,6 +298,30 @@ async function loadTableData(pageNumber = 1, pageSize = 10, type = "docs") {
 // DOM 로드 시 실행
 document.addEventListener("DOMContentLoaded", function () {
   loadTableData(); // 페이지 로드 시 서류작성 버튼 클릭한 것과 동일한 데이터를 불러옴
+
+  // 카테고리 선택 이벤트 리스너 추가
+  categorySelect.addEventListener("change", (event) => {
+    selectedCategory = event.target.value;
+    console.log("Selected Category:", selectedCategory);
+  });
+
+  // 검색어 입력 이벤트 리스너 추가
+  searchInput.addEventListener("input", (event) => {
+    searchKeyword = event.target.value;
+    console.log("Search Keyword:", searchKeyword);
+  });
+
+  // 검색 버튼 클릭 이벤트 리스너 추가
+  searchButton.addEventListener("click", () => {
+    loadTableData();
+  });
+
+  // 검색어 입력창에서 엔터키 이벤트 리스너 추가
+  searchInput.addEventListener("keypress", (event) => {
+    if (event.key === "Enter") {
+      loadTableData();
+    }
+  });
 
   // 이전 버튼 클릭 이벤트 리스너 추가
   prevButton.addEventListener("click", () => {
@@ -170,141 +352,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  let deletedRows = []; // 삭제된 행을 저장하기 위한 배열
-
   // 테이블 편집 버튼 클릭 이벤트 추가
-  let editMode = false;
-  const editButton = document.querySelector(".company-management__button-edit");
-  editButton.addEventListener("click", function () {
-    const tableHeader = document.querySelector(".usage-history__table-header");
-    const tableDataRows = document.querySelectorAll(
-      ".usage-history__table-data"
-    );
-
-    if (editMode) {
-      // 완료 버튼 클릭 시 원래 상태로 되돌리기
-      location.reload(); // 페이지 새로고침으로 원래 상태 복구
-      return;
-    }
-
-    // 테이블 헤더 변경
-    tableHeader.innerHTML = `
-      <tr class="usage-history__table-container">
-        <th class="usage-history__table-item usage-history__table-item--no"></th>
-        <th class="usage-history__table-item usage-history__table-item--no">No.</th>
-        <th class="usage-history__table-item usage-history__table-item--company">업체명</th>
-        <th class="usage-history__table-item usage-history__table-item--representative">대표자</th>
-        <th class="usage-history__table-item usage-history__table-item--phone">연락처</th>
-        <th class="usage-history__table-item usage-history__table-item--email">이메일</th>
-        <th class="usage-history__table-item usage-history__table-item--account">계좌번호</th>
-        <th class="usage-history__table-item usage-history__table-item--holder">예금주</th>
-        <th class="usage-history__table-item usage-history__table-item--no"></th>
-        <th class="usage-history__table-item usage-history__table-item--no"></th>
-      </tr>
-    `;
-
-    // 테이블 데이터 변경
-    tableDataRows.forEach((row) => {
-      const cells = row.querySelectorAll(".usage-history__table-item");
-
-      // 각 셀의 텍스트를 가져와서 새로운 구조에 맞게 배치
-      const no = cells[0].innerText;
-      const company = cells[1].innerText;
-      const representative = cells[2].innerText;
-      const phone = cells[3].innerText;
-      const email = cells[4].innerText;
-      const account = cells[5].innerText;
-      const holder = cells[6].innerText;
-
-      row.innerHTML = `
-        <tr class="usage-history__table-container">
-          <th class="usage-history__table-item usage-history__table-item--no">
-            <img src="../../static/chatbot-admin/images/Fluid.svg" />
-          </th>
-          <td class="usage-history__table-item usage-history__table-item--no">${no}</td>
-          <td class="usage-history__table-item usage-history__table-item--company">${company}</td>
-          <td class="usage-history__table-item usage-history__table-item--representative">${representative}</td>
-          <td class="usage-history__table-item usage-history__table-item--phone">${phone}</td>
-          <td class="usage-history__table-item usage-history__table-item--email">${email}</td>
-          <td class="usage-history__table-item usage-history__table-item--account">${account}</td>
-          <td class="usage-history__table-item usage-history__table-item--holder">${holder}</td>
-          <th class="usage-history__table-item usage-history__table-item--no edit-icon">
-            <img src="../../static/chatbot-admin/images/Edit_fill.svg" />
-          </th>
-          <th class="usage-history__table-item usage-history__table-item--no delete-icon">
-            <img src="../../static/chatbot-admin/images/Trash.svg" class="agency-delete"/>
-          </th>
-        </tr>
-      `;
-    });
-
-    // 버튼을 "완료" 버튼으로 변경
-    editButton.innerHTML = `
-      <span class="company-management__button-edit-text">완료</span>
-      <img src="../../static/chatbot-admin/images/white-pencil.svg" />
-    `;
-    editButton.classList.add("done");
-
-    editMode = true;
-
-    // Edit 아이콘 클릭 이벤트 추가
-    const editIcons = document.querySelectorAll(".edit-icon img");
-    const modal = document.querySelector(".modal-background.edit");
-    const modalInputCompany = modal.querySelector(
-      ".agency__info-input.company input"
-    );
-    const modalInputRepresentative = modal.querySelector(
-      ".agency__info-input.representative input"
-    );
-    const modalInputPhone = modal.querySelector(
-      ".agency__info-input.phone input"
-    );
-    const modalInputEmail = modal.querySelector(
-      ".agency__info-input.email input"
-    );
-    const modalInputAccount = modal.querySelector(
-      ".agency__info-input.account input:nth-child(2)"
-    );
-    const modalInputHolder = modal.querySelector(
-      ".agency__info-input.holder input"
-    );
-    let currentRow; // 현재 선택된 row를 저장하기 위한 변수
-
-    editIcons.forEach((icon) => {
-      icon.addEventListener("click", function () {
-        currentRow = this.closest("tr"); // 현재 클릭된 row 저장
-        const cells = currentRow.querySelectorAll(".usage-history__table-item");
-
-        // 모달 input 필드에 현재 row의 데이터 채우기
-        modalInputCompany.value = cells[2].innerText;
-        modalInputRepresentative.value = cells[3].innerText;
-        modalInputPhone.value = cells[4].innerText;
-        modalInputEmail.value = cells[5].innerText;
-        modalInputAccount.value = cells[6].innerText;
-        modalInputHolder.value = cells[7].innerText;
-
-        // 모달을 표시
-        modal.style.display = "flex";
-      });
-    });
-
-    // "등록하기" 버튼 클릭 이벤트 추가 (모달 닫기 및 데이터 업데이트 기능 포함)
-    const saveButtonEdit = modal.querySelector(
-      ".agency__info-input-wrapper.fourth button"
-    );
-    saveButtonEdit.addEventListener("click", function () {
-      // 현재 row의 데이터 업데이트
-      const cells = currentRow.querySelectorAll(".usage-history__table-item");
-      cells[2].innerText = modalInputCompany.value;
-      cells[3].innerText = modalInputRepresentative.value;
-      cells[4].innerText = modalInputPhone.value;
-      cells[5].innerText = modalInputEmail.value;
-      cells[6].innerText = modalInputAccount.value;
-      cells[7].innerText = modalInputHolder.value;
-
-      // 모달을 닫기
-      modal.style.display = "none";
-    });
+  editButton.addEventListener("click", () => {
+    editTable(data, currentPage, (pageSize = 10));
   });
 
   // 추가 버튼 클릭 이벤트 추가
