@@ -11,6 +11,9 @@ document.addEventListener("DOMContentLoaded", function () {
   );
   const doneButton = document.querySelector(".button-container__button.done");
   const editButton = document.querySelector(".edit-button__container button");
+  const continueButton = document.querySelector(
+    ".button-container__button.continue"
+  );
 
   // 시작 시 최초 접속 메시지 및 1단계 표시
   showInitialMessage();
@@ -24,6 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (event.target.classList.contains("first-step__button")) {
       const buttonText = event.target.textContent;
       sendMessage(buttonText);
+      sendCategory(buttonText); // 카테고리 전송 API 호출
       showSecondStep();
     }
 
@@ -49,6 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       sendMessage(selectedValue);
+      sendCategory(selectedValue); // 카테고리 전송 API 호출
 
       if (event.target.id === "secondStepButton") {
         showThirdStep();
@@ -76,9 +81,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // "수정하기" 버튼의 텍스트를 "수정완료"로 변경
-    const editButton = event.target
-      .closest(".edit-button__container")
-      .querySelector("button");
+    // editButton = event.target
+    //   .closest(".edit-button__container")
+    //   .querySelector("button");
     editButton.innerHTML = `
     수정완료<svg class="info-down-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M18 9L12 15L6 9" stroke="#fff" stroke-width="3"/>
@@ -462,4 +467,79 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   });
+
+  continueButton.addEventListener("click", function () {
+    sendPersonalInfo();
+  });
 });
+
+async function sendCategory(category) {
+  const requestData = { category };
+
+  // const url = "endpoint"; // 실제 API 주소 입력
+  try {
+    // const response = await fetch(url, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(requestData),
+    // });
+    // const result = await response.json();
+    console.log("카테고리 전송 완료", requestData);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function sendPersonalInfo() {
+  // 입력값 가져오기
+  const name = document.querySelector('input[name="name"]').value;
+  const phoneNumber = document.querySelector('input[name="phoneNumber"]').value;
+  const nationality = document.querySelector('input[name="nationality"]').value;
+  const passportNumber = document.querySelector(
+    'input[name="passportNumber"]'
+  ).value;
+  const passportIssueDate = document.querySelector(
+    'input[name="passportIssueDate"]'
+  ).value;
+  const passportExpiryDate = document.querySelector(
+    'input[name="passportExpiryDate"]'
+  ).value;
+  const alienRegistrationNumber = document.querySelector(
+    'input[name="alienRegistrationNumber"]'
+  ).value;
+  const address = document.querySelector('input[name="address"]').value;
+  const visaExpiryDate = document.querySelector(
+    'input[name="visaExpiryDate"]'
+  ).value;
+  const visaType = document.querySelector('input[name="visaType"]').value;
+
+  const requestData = {
+    name,
+    phoneNumber,
+    nationality,
+    passportNumber,
+    passportIssueDate,
+    passportExpiryDate,
+    alienRegistrationNumber,
+    address,
+    visaExpiryDate,
+    visaType,
+  };
+
+  // const url = "endpoint"; // 실제 API 주소 입력
+  try {
+    // const response = await fetch(url, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(requestData),
+    // });
+    // const result = await response.json();
+    console.log("개인정보 전송 완료", requestData);
+  } catch (e) {
+    console.error(e);
+  }
+}
