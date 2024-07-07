@@ -96,12 +96,7 @@ function openFileExplorer() {
 
   // 파일 탐색기를 열기 위한 이벤트 리스너 추가
   formTableBody.addEventListener("click", function (event) {
-    if (
-      event.target.classList.contains("refresh-list-form") ||
-      event.target.classList.contains("refresh-list-attach") ||
-      event.target.classList.contains("refresh-file") ||
-      event.target.classList.contains("refresh-status")
-    ) {
+    if (event.target.classList.contains("refresh-file")) {
       hiddenFileInput.click();
     }
   });
@@ -177,6 +172,43 @@ function addCheckboxToggleListener(tableClass) {
     });
 }
 
+function handleRefreshClick(event) {
+  const refreshIcon = event.target;
+  const listItemContainer = refreshIcon.closest("td"); // td 요소를 찾습니다.
+  const listItem =
+    listItemContainer.querySelector("span") ||
+    listItemContainer.querySelector("input"); // span 또는 input 요소
+
+  if (refreshIcon.src.includes("refresh.svg")) {
+    // 이미지 변경 및 span을 input으로 변경
+    refreshIcon.src = "../../static/chatbot-admin/images/Check_fill.svg";
+    const input = document.createElement("input");
+    input.style.width = "100px";
+    input.type = "text";
+    input.value = listItem.innerText;
+    listItem.replaceWith(input);
+
+    input.focus();
+    input.setSelectionRange(input.value.length, input.value.length);
+  } else if (refreshIcon.src.includes("Check_fill.svg")) {
+    // 변경 완료 버튼 클릭 시 이미지 변경 및 input을 span으로 변경
+    const newSpan = document.createElement("span");
+    const newName = listItem.value;
+    newSpan.innerText = newName;
+    listItem.replaceWith(newSpan);
+    refreshIcon.src = "../../static/chatbot-admin/images/refresh.svg";
+
+    // 목록명 수정 API 호출
+    const documentId = 1; // 수정할 서류 id (실제 id로 변경 필요)
+    const documentType = listItemContainer
+      .closest("table")
+      .classList.contains("form")
+      ? "form"
+      : "attach";
+    updateDocumentName(documentId, documentType, newName);
+  }
+}
+
 // // 카테고리에 따른 양식서류, 첨부서류 조회 API 연동 함수
 async function fetchCategoryData() {
   categorySelects.forEach((select, index) => {
@@ -230,7 +262,7 @@ async function fetchCategoryData() {
           <input type="checkbox" />
         </td>
         <td class="usage-history__table-item usage-history__table-item--list">
-          ${doc.list}
+          <span>${doc.list}</span>
           <img class="refresh-list-form" src="../../static/chatbot-admin/images/refresh.svg" />
         </td>
         <td class="usage-history__table-item usage-history__table-item--docs">
@@ -238,7 +270,7 @@ async function fetchCategoryData() {
           <img class="refresh-file" src="../../static/chatbot-admin/images/refresh.svg" />
         </td>
         <td class="usage-history__table-item usage-history__table-item--status">
-          ${doc.status}
+          <span>${doc.status}</span>
           ${
             doc.status === "다운 허용"
               ? '<img class="refresh-status" src="../../static/chatbot-admin/images/refresh.svg" />'
@@ -261,7 +293,7 @@ async function fetchCategoryData() {
           <input type="checkbox" />
         </td>
         <td class="usage-history__table-item usage-history__table-item--list attach-data">
-          ${doc.list}
+          <span>${doc.list}</span>
           <img class="refresh-list-attach" src="../../static/chatbot-admin/images/refresh.svg" />
         </td>
         <td class="usage-history__table-item usage-history__table-item--delete attach">
@@ -416,6 +448,41 @@ async function updateTaskCost() {
   }
 }
 
+async function updateDocumentName(documentId, documentType, newName) {
+  // const url = "endpoint" // 실제 API 주소
+  try {
+    // const response = await fetch(url, {
+    //   method: "PUT",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     category1,
+    //     category2,
+    //     category3,
+    //     category4,
+    //     category5,
+    //     documentId,
+    //     documentType,
+    //     newName,
+    //   }),
+    // });
+    // const result = await response.json();
+    console.log("서류명 수정 완료", {
+      category1: category1,
+      category2: category2,
+      category3: category3,
+      category4: category4,
+      category5: category5,
+      documentId: documentId,
+      documentType: documentType,
+      newName: newName,
+    });
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 async function deleteDocument(documentId, documentType) {
   // const url = "endpoint" // 실제 API 주소
   try {
@@ -551,6 +618,15 @@ document.addEventListener("DOMContentLoaded", function () {
       </tr>`;
       attachTableBody.insertAdjacentHTML("afterbegin", newRow); // 테이블 상단에 추가
       inputAttach.value = ""; // 입력 필드 초기화
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    if (event.target.classList.contains("refresh-list-form")) {
+      handleRefreshClick(event);
+    }
+    if (event.target.classList.contains("refresh-list-attach")) {
+      handleRefreshClick(event);
     }
   });
 

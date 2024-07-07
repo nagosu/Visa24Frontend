@@ -290,11 +290,21 @@
 .usage-history__table-item--list {
   width: 30%;
   font-size: 12px;
+
+  img {
+    cursor: pointer;
+  }
 }
 
 .usage-history__table-item--docs {
   width: 40%;
   font-size: 12px;
+  text-decoration: underline;
+  cursor: pointer;
+
+  img {
+    cursor: pointer;
+  }
 }
 
 .usage-history__table-item--list,
@@ -306,6 +316,10 @@
 .usage-history__table-item--status {
   width: 15%;
   font-size: 12px;
+
+  img {
+    cursor: pointer;
+  }
 }
 
 .usage-history__table-item--delete {
