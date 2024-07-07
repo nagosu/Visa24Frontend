@@ -151,12 +151,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 검색 버튼 클릭 이벤트 리스너 추가
   searchButton.addEventListener("click", () => {
+    if (selectedCategory === "카테고리 명" || searchKeyword === "") {
+      return;
+    }
     loadTableData();
   });
 
   // 검색어 입력창에서 엔터키 이벤트 리스너 추가
   searchInput.addEventListener("keypress", (event) => {
     if (event.key === "Enter") {
+      if (selectedCategory === "카테고리 명" || searchKeyword === "") {
+        return;
+      }
       loadTableData();
     }
   });
