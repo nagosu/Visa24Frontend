@@ -86,22 +86,6 @@ function closeDeleteModal() {
   modalDelete.style.display = "none";
 }
 
-// 파일 탐색기 열기 함수
-function openFileExplorer() {
-  // 파일 입력 요소 추가
-  const hiddenFileInput = document.createElement("input");
-  hiddenFileInput.type = "file";
-  hiddenFileInput.style.display = "none";
-  document.body.appendChild(hiddenFileInput);
-
-  // 파일 탐색기를 열기 위한 이벤트 리스너 추가
-  formTableBody.addEventListener("click", function (event) {
-    if (event.target.classList.contains("refresh-file")) {
-      hiddenFileInput.click();
-    }
-  });
-}
-
 // 체크박스 전체 선택/해제 기능 함수
 function addCheckboxToggleListener(tableClass) {
   const table = document.querySelector(`.${tableClass}`); // 테이블
@@ -172,6 +156,7 @@ function addCheckboxToggleListener(tableClass) {
     });
 }
 
+// 목록명 수정/변경 함수
 function handleRefreshClick(event) {
   const refreshIcon = event.target;
   const listItemContainer = refreshIcon.closest("td"); // td 요소를 찾습니다.
@@ -209,7 +194,102 @@ function handleRefreshClick(event) {
   }
 }
 
-// // 카테고리에 따른 양식서류, 첨부서류 조회 API 연동 함수
+// 업로드 버튼 클릭 시 파일 탐색기 열기 함수
+function handleFileUploadClick(event) {
+  const uploadButton = event.target;
+  const fileContainer = uploadButton.closest("td");
+  const tableRow = fileContainer.closest("tr");
+
+  const hiddenFileInput = document.createElement("input");
+  hiddenFileInput.type = "file";
+  hiddenFileInput.style.display = "none";
+  document.body.appendChild(hiddenFileInput);
+
+  hiddenFileInput.addEventListener("change", function (event) {
+    const file = event.target.files[0];
+    if (file) {
+      const newFileName = file.name;
+      const fileLink = document.createElement("a");
+      fileLink.href = URL.createObjectURL(file);
+      fileLink.download = newFileName;
+      fileLink.textContent = newFileName;
+
+      const refreshIcon = document.createElement("img");
+      refreshIcon.src = "../../static/chatbot-admin/images/refresh.svg";
+      refreshIcon.classList.add("refresh-file");
+
+      fileContainer.innerHTML = "";
+      fileContainer.appendChild(fileLink);
+      fileContainer.appendChild(refreshIcon);
+
+      // 상태 업데이트
+      const statusContainer = tableRow.querySelector(
+        ".usage-history__table-item--status"
+      );
+      if (statusContainer) {
+        statusContainer.innerHTML = `
+        <span>다운 허용</span>
+        <img class="refresh-status" src="../../static/chatbot-admin/images/refresh.svg" />
+        `;
+      }
+
+      // 파일을 변수에 저장하여 나중에 API 호출 시 사용
+      fileContainer.dataset.newFile = file;
+
+      // API 호출
+      const documentId = 1; // 수정할 서류 id (실제 id로 변경 필요)
+      const documentType = "form";
+      updateDocumentFile(documentId, documentType, file);
+    }
+  });
+
+  hiddenFileInput.click(); // 파일 탐색기 열기
+}
+
+// 양식서류 수정/변경 함수
+function handleFileRefreshClick(event) {
+  const refreshIcon = event.target;
+  const fileContainer = refreshIcon.closest("td");
+  const fileLink = fileContainer.querySelector("a");
+
+  if (refreshIcon.src.includes("refresh.svg")) {
+    // 이미지 변경 및 파일 탐색기 열기
+    refreshIcon.src = "../../static/chatbot-admin/images/Check_fill.svg";
+
+    const hiddenFileInput = document.createElement("input");
+    hiddenFileInput.type = "file";
+    hiddenFileInput.style.display = "none";
+    document.body.appendChild(hiddenFileInput);
+
+    hiddenFileInput.addEventListener("change", function (event) {
+      const file = event.target.files[0];
+      if (file) {
+        const newFileName = file.name;
+        fileLink.textContent = newFileName;
+        fileLink.href = URL.createObjectURL(file);
+
+        // 파일을 변수에 저장하여 나중에 API 호출 시 사용
+        fileContainer.dataset.newFile = file;
+      }
+    });
+
+    hiddenFileInput.click(); // 파일 탐색기 열기
+  } else if (refreshIcon.src.includes("Check_fill.svg")) {
+    // 변경 완료 버튼 클릭 시 이미지 변경
+    refreshIcon.src = "../../static/chatbot-admin/images/refresh.svg";
+
+    // 파일명 수정 API 호출
+    const documentId = 1; // 수정할 서류 id (실제 id로 변경 필요)
+    const documentType = "form";
+    const newFile = fileContainer.dataset.newFile;
+    if (newFile) {
+      updateDocumentFile(documentId, documentType, newFile);
+      delete fileContainer.dataset.newFile;
+    }
+  }
+}
+
+// 카테고리에 따른 양식서류, 첨부서류 조회 API 연동 함수
 async function fetchCategoryData() {
   categorySelects.forEach((select, index) => {
     if (select.value === "카테고리 명") {
@@ -266,16 +346,20 @@ async function fetchCategoryData() {
           <img class="refresh-list-form" src="../../static/chatbot-admin/images/refresh.svg" />
         </td>
         <td class="usage-history__table-item usage-history__table-item--docs">
-          <a href="./dummyFiles/${doc.file}" download>${doc.file}</a>
-          <img class="refresh-file" src="../../static/chatbot-admin/images/refresh.svg" />
+        ${
+          doc.file
+            ? `<a href="./dummyFiles/${doc.file}" download>${doc.file}</a>
+          <img class="refresh-file" src="../../static/chatbot-admin/images/refresh.svg" />`
+            : '<button class="upload-button">업로드</button>'
+        }
         </td>
         <td class="usage-history__table-item usage-history__table-item--status">
-          <span>${doc.status}</span>
-          ${
-            doc.status === "다운 허용"
-              ? '<img class="refresh-status" src="../../static/chatbot-admin/images/refresh.svg" />'
-              : ""
-          }
+          <span>${doc.file ? "다운 허용" : "다운 금지"}</span>
+      ${
+        doc.file
+          ? '<img class="refresh-status" src="../../static/chatbot-admin/images/refresh.svg" />'
+          : ""
+      }
         </td>
         <td class="usage-history__table-item usage-history__table-item--delete">
           <img class="trash-icon" src="../../static/chatbot-admin/images/Trash.svg" />
@@ -302,8 +386,6 @@ async function fetchCategoryData() {
       </tr>`;
       attachTableBody.insertAdjacentHTML("beforeend", row);
     });
-
-    openFileExplorer(); // 파일 탐색기 열기
 
     // 새로 생성된 삭제 버튼에 이벤트 리스너 등록
     const newDeleteIcons = document.querySelectorAll(".trash-icon");
@@ -381,6 +463,7 @@ function addPencilClickListener(className) {
   });
 }
 
+// 서류 추가 API 연동 함수
 async function addDocument(documentType, documentName) {
   // const url = "endpoint" // 실제 API 주소
   try {
@@ -448,6 +531,7 @@ async function updateTaskCost() {
   }
 }
 
+// 목록명 수정 API 연동 함수
 async function updateDocumentName(documentId, documentType, newName) {
   // const url = "endpoint" // 실제 API 주소
   try {
@@ -483,6 +567,53 @@ async function updateDocumentName(documentId, documentType, newName) {
   }
 }
 
+// 양식파일 수정 API 연동 함수
+async function updateDocumentFile(documentId, documentType, newFile) {
+  // const url = "endpoint" // 실제 API 주소
+  // const formData = new FormData();
+  // formData.append("category1", category1);
+  // formData.append("category2", category2);
+  // formData.append("category3", category3);
+  // formData.append("category4", category4);
+  // formData.append("category5", category5);
+  // formData.append("documentId", documentId);
+  // formData.append("documentType", documentType);
+  // formData.append("file", newFile);
+
+  try {
+    // const response = await fetch(url, {
+    //   method: "PUT",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     category1,
+    //     category2,
+    //     category3,
+    //     category4,
+    //     category5,
+    //     documentId,
+    //     documentType,
+    //     newFileName,
+    //   }),
+    // });
+    // const result = await response.json();
+    console.log("서류 파일명 수정 완료", {
+      category1: category1,
+      category2: category2,
+      category3: category3,
+      category4: category4,
+      category5: category5,
+      documentId: documentId,
+      documentType: documentType,
+      newFile: newFile,
+    });
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+// 서류 삭제 API 연동 함수
 async function deleteDocument(documentId, documentType) {
   // const url = "endpoint" // 실제 API 주소
   try {
@@ -515,9 +646,6 @@ async function deleteDocument(documentId, documentType) {
     console.error(e);
   }
 }
-
-// 서류 테이블에 목록 추가 함수
-function addListToTable(tableBody, list) {}
 
 // DOM 로드 후 실행
 document.addEventListener("DOMContentLoaded", function () {
@@ -627,6 +755,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     if (event.target.classList.contains("refresh-list-attach")) {
       handleRefreshClick(event);
+    }
+    if (event.target.classList.contains("refresh-file")) {
+      handleFileRefreshClick(event);
+    }
+    if (event.target.classList.contains("upload-button")) {
+      handleFileUploadClick(event);
     }
   });
 

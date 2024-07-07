@@ -12,7 +12,7 @@ const dummyCategoryData = {
     },
     {
       list: "거소신고서",
-      file: "거소신고서.hwp",
+      file: "",
       status: "다운 허용",
     },
     {
